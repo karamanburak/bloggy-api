@@ -68,11 +68,19 @@ module.exports.BlogPostController = {
     },
 
     deleteMany: async (req, res) => {
-        const data = await BlogPost.deleteMany()
-        res.status(200).send({
-            error: false,
-            message: "All Blog post successfully deleted",
-        })
+        // const data = await BlogPost.deleteMany() //* opsiyonda eklenebilir
+        const data = await BlogPost.deleteMany({ published: false })
+        if (data.deletedCount) {
+            res.status(200).send({
+                error: false,
+                message: "All unpublished blog posts have been successfully deleted",
+            })
+        } else {
+            res.status(404).send({
+                error: true,
+                message: "There are no published blog posts"
+            })
+        }
     },
 
     createMany: async (req, res) => {
