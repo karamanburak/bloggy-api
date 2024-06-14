@@ -41,17 +41,38 @@ module.exports.BlogPostController = {
     },
 
     delete: async (req, res) => {
-        const data = await BlogPost.findByIdAndDelete(req.params.id)
-        if (data) {
-            // res.sendStatus(204)
-            res.status(200).send({
-                error: false,
-                message: "Blog post successfully deleted",
-                deletedData: data
-            })
+        // const data = await BlogPost.findByIdAndDelete(req.params.id)
+        // if (data) {
+        //     // res.sendStatus(204)
+        //     res.status(200).send({
+        //         error: false,
+        //         message: "Blog post successfully deleted",
+        //         deletedData: data
+        //     })
+        // } else {
+        //     res.sendStatus(404)
+        // }
+
+        const data = await BlogPost.deleteOne({ _id: req.params.id })
+        console.log(data)
+        // res.sendStatus(data.deletedCount ? 204 : 404);
+        if (data.deletedCount) {
+            res.sendStatus(204)
         } else {
-            res.sendStatus(404)
+            res.status(404).send({
+                error: false,
+                message: "Blog post not found",
+            })
         }
+
+    },
+
+    deleteMany: async (req, res) => {
+        const data = await BlogPost.deleteMany()
+        res.status(200).send({
+            error: false,
+            message: "All Blog post successfully deleted",
+        })
     },
 
     createMany: async (req, res) => {
