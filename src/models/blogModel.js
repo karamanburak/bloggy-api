@@ -60,3 +60,15 @@ const blogPostSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+//^ Export 1. yol
+// const BlogPostModel = mongoose.model("blogPost", blogPostSchema);
+
+// module.exports = {
+//   BlogPost: BlogPostModel,
+// };
+
+//^ Export 2. yol
+module.exports = {
+  BlogPost: mongoose.model("blogPost", blogPostSchema),
+};
