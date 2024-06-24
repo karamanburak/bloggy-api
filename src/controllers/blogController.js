@@ -54,9 +54,10 @@ module.exports.BlogCategoryController = {
 module.exports.BlogPostController = {
     list: async (req, res) => {
         // const data = await BlogPost.find({ published: false });
-        const data = await BlogPost.find().populate(
-            "blogCategoryId", "name -_id"
-        );
+        const data = await BlogPost.find({ published: true }).populate(
+            "blogCategoryId",
+            "name -_id"
+        ); //* ilk parametre alanın adı. Eğer istemdğimiz alanlar varsa bunları belirtebiliriz. istedğimiz veya istemediğimiz alanları aralara boşluk koyarak ekleyebiliriz . İstemediğimiz alanların başına "-" koyarak bunları getirme diyebiliriz.
 
         res.status(200).send({
             error: false,
