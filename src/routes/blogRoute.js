@@ -2,8 +2,23 @@
 
 const router = require("express").Router();
 
-const { BlogPostController } = require("../controllers/blogController");
+const { BlogPostController, BlogCategoryController } = require("../controllers/blogController");
+//! Base route => /blog
+//* category
+router
+    .route("/categories")
+    .get(BlogCategoryController.list)
+    .post(BlogCategoryController.create);
 
+router
+    .route("/categories/:id")
+    .get(BlogCategoryController.read)
+    .put(BlogCategoryController.update)
+    .delete(BlogCategoryController.delete)
+
+
+
+//* posts
 router
     .route("/post")
     .get(BlogPostController.list)
