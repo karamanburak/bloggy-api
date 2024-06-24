@@ -6,6 +6,16 @@ const UserSchema = new mongoose.Schema({
         trim: true,
         required: true,
         unique: true,
+        //     validate: [(email) => {
+        //         if (email.includes("@") && email.split('@')[1].includes(".")) {
+        //             return true;
+        //         }
+        //         return false
+        //     }, "Email is invalid"]
+        // },
+        validate: [(email) =>
+            (email.includes("@") && email.split('@')[1].includes(".")), "Email is invalid"]
+        //* regex ifadeleriyle daha kapsamli bir validasyon yapilabilir. true dönerse validasyondan gecer, false dönerse kalir.
     },
     password: {
         type: String,
@@ -19,4 +29,4 @@ const UserSchema = new mongoose.Schema({
     timestamps: true
 })
 
-module.exports.mongoose.Model("User", UserSchema)
+module.exports = mongoose.model("User", UserSchema)
