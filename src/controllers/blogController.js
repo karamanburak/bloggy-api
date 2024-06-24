@@ -75,7 +75,7 @@ module.exports.BlogPostController = {
         // const data = await BlogPost.findById(req.params.id); //* sadece id secenegini kabul eder
         // const data = await BlogPost.findOne({ published: false }); //* ilk false olan blogu getirir
         // const data = await BlogPost.findOne({ _id: req.params.id }); //* diger secenekleri de kabul eder
-        const data = await BlogPost.findOne({ _id: req.params.id }).populate("blogCategoryId")
+        const data = await BlogPost.findOne({ _id: req.params.id }).populate("blogCategoryId") //* ilk parametre alanın adı. Eğer istemdğimiz alanlar varsa bunları belirtebiliriz. istedğimiz veya istemediğimiz alanları aralara boşluk koyarak ekleyebiliriz . İstemediğimiz alanların başına "-" koyarak bunları getirme diyebiliriz.
         res.status(200).send({
             error: false,
             blog: data,
