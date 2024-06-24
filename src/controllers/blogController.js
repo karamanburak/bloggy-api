@@ -4,7 +4,7 @@ const { BlogPost, BlogCategory } = require("../models/blogModel");
 
 module.exports.BlogCategoryController = {
     list: async (req, res) => {
-        const data = await BlogCategory.find();
+        const data = await BlogCategory.find()
 
         res.status(200).send({
             error: false,
@@ -54,7 +54,9 @@ module.exports.BlogCategoryController = {
 module.exports.BlogPostController = {
     list: async (req, res) => {
         // const data = await BlogPost.find({ published: false });
-        const data = await BlogPost.find();
+        const data = await BlogPost.find().populate(
+            "blogCategoryId", "name -_id"
+        );
 
         res.status(200).send({
             error: false,
@@ -72,8 +74,8 @@ module.exports.BlogPostController = {
     read: async (req, res) => {
         // const data = await BlogPost.findById(req.params.id); //* sadece id secenegini kabul eder
         // const data = await BlogPost.findOne({ published: false }); //* ilk false olan blogu getirir
-        const data = await BlogPost.findOne({ _id: req.params.id }); //* diger secenekleri de kabul eder
-
+        // const data = await BlogPost.findOne({ _id: req.params.id }); //* diger secenekleri de kabul eder
+        const data = await BlogPost.findOne({ _id: req.params.id }).populate("blogCategoryId")
         res.status(200).send({
             error: false,
             blog: data,

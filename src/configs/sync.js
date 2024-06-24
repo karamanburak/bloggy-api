@@ -3,6 +3,7 @@ const { BlogPost, BlogCategory } = require("../models/blogModel")
 module.exports = async () => {
 
     const blogCategory = await BlogCategory.findOne()
+    console.log(blogCategory._id);
 
     if (blogCategory) {
         await BlogPost.updateMany(
