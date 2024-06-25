@@ -3,6 +3,9 @@
 const router = require("express").Router();
 
 const { BlogPostController, BlogCategoryController } = require("../controllers/blogController");
+const isAuth = require("../middlewares/isAuth");
+
+
 //! Base route => /blog
 //* category
 router
@@ -30,9 +33,10 @@ router.route("/post/many")
 
 router
     .route("/post/:id")
+    // .all(isAuth) // isAuth'u all ile buraya yazarsak, bu route a özel olarak asagidaki islemleri yapmasini engelle
     .get(BlogPostController.read)
     .put(BlogPostController.update)
-    .delete(BlogPostController.delete)
+    .delete(isAuth, BlogPostController.delete);
 
 
 module.exports = router;
