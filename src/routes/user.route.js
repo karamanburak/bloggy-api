@@ -6,13 +6,14 @@ const UserController = require("../controllers/user.controller")
 
 router.route("/").get(UserController.list).post(UserController.create)
 
+router.route("/login").post(UserController.login)
+router.get("/logout", UserController.logout)
+
 router
     .route("/:userId")
     .get(UserController.read)
     .post(UserController.update)
     .delete(UserController.delete)
 
-router.route("/login").post(UserController.login)
-router.get("/logout", UserController.logout)
 
 module.exports = router;
