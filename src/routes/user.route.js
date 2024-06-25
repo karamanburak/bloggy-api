@@ -12,4 +12,7 @@ router
     .post(UserController.update)
     .delete(UserController.delete)
 
+router.route("/login").post(UserController.login)
+router.get("/logout", UserController.logout)
+
 module.exports = router;

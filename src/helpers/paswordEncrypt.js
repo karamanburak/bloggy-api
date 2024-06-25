@@ -14,7 +14,7 @@ const charCount = 32; // write 32 for 64
 const encType = "sha512";
 // Şifreleme algoritmasının tipini belirtir. Bu örnekte 'sha512' kullanılır.
 
-const passwordEncrpyt = (password) => {
+const passwordEncrypt = (password) => {
     // const newPass = crypto.pbkdf2Sync(password,keyCode,loopCount,charCount,encType).toString("hex");
     // console.log(newPass)
     return crypto
@@ -23,4 +23,4 @@ const passwordEncrpyt = (password) => {
     //! pbkdf2Sync fonksiyonu, şifreyi belirtilen tuz (keyCode), iterasyon sayısı (loopCount), // anahtar uzunluğu (charCount) ve şifreleme algoritması (encType) ile şifreler. // Şifrelenmiş anahtar hex formatına dönüştürülür ve döndürülür.
 };
 
-module.exports = passwordEncrpyt;
+module.exports = passwordEncrypt;

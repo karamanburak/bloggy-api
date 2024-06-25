@@ -5,7 +5,7 @@ const mongoose = require("mongoose")
 
 // const keyCode = process.env.SECRET_KEY
 // const loopCount = 10000
-// const charCount = 32 // write 32 for 64 
+// const charCount = 32 // write 32 for 64
 // const encType = 'sha512'
 
 // const passwordEncrypt = (password) => {
@@ -18,6 +18,8 @@ const mongoose = require("mongoose")
 
 // passwordEncrypt("123456")
 // passwordEncrypt("1234576")
+
+//* bu işlemi daha temiz olması açısından ayrı bir dosyaya taşıdık
 const passwordEncrypt = require("../helpers/paswordEncrypt")
 
 const UserSchema = new mongoose.Schema({
@@ -33,8 +35,9 @@ const UserSchema = new mongoose.Schema({
         //         return false
         //     }, "Email is invalid"]
         // },
-        validate: [(email) =>
-            (email.includes("@") && email.split('@')[1].includes(".")), "Email is invalid"]
+        validate: [
+            (email) => (email.includes("@") && email.split('@')[1].includes(".")),
+            "Email is invalid"]
         //* regex ifadeleriyle daha kapsamli bir validasyon yapilabilir. true dönerse validasyondan gecer, false dönerse kalir.
     },
     password: {

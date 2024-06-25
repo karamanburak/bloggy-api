@@ -51,7 +51,7 @@ const blogPostSchema = new mongoose.Schema(
   {
     // _id
     blogCategoryId: {
-      type: mongoose.Schema.Types.ObjectId, //foreignKey, relationalId
+      type: mongoose.Schema.Types.ObjectId, //ForeingKey, relationalId
       required: true,
       ref: "BlogCategory",
     },
