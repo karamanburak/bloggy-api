@@ -9,6 +9,13 @@ const PORT = process.env.PORT;
 app.use(express.json());
 require("./src/configs/dbConnection");
 
+const session = require("cookie-session")
+
+app.use(session({
+  secret: process.env.SECRET_KEY,
+  // maxAge: 1000 * 60 * 60 * 24  * 3 //* milliseconds // 3 days
+}))
+
 // HomePage:
 app.all("/", (req, res) => {
   res.send(
