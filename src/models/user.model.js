@@ -41,7 +41,8 @@ const UserSchema = new mongoose.Schema({
         type: String,
         trim: true,
         required: true,
-        set: (password) => passwordEncrypt(password)//* set; db ye akydolurken veriyi işlemden geçirerk kaydolmasını sağlar
+        // set: (password) => "martin" //* kullanici sifre olarak ne girerse girsin db ye martin olarak kaydolur
+        set: (password) => passwordEncrypt(password)//* set; db ye kaydolurken veriyi işlemden geçirerk kaydolmasını sağlar
         //! db ye şifre bilgileri güvenlik amaçlı doğrudan eklenmez. Hashlenmiş bir şekilde veritabanına eklenir.
     },
     firstName: String,
