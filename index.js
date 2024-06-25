@@ -16,19 +16,28 @@ app.use(session({
   // maxAge: 1000 * 60 * 60 * 24  * 3 //* milliseconds // 3 days
 }))
 
+//? user control
+app.use(require("./src/middlewares/userControl"));
 // HomePage:
-// app.all("/", (req, res) => {
-//   res.send(
-//     "<h1 style='text-align:center;margin-top:150px'>WELCOME TO BLOGGY API</h1>"
-//   );
-// });
-
+// app.all('/', (req, res) => {
+//     res.send("<h1 style='text-align:center;margin-top:150px'>WELCOME TO BLOG API</h1>");
+// })
 app.all("/", (req, res) => {
-  res.send({
-    message: "Wellcome to Bloggy Api",
-    session: req.session
-  });
+  if (req.isLogin) {
+    res.send({
+      message: "Welcome to BlogApi",
+      session: req.session,
+      user: req.user
+    });
+  } else {
+    res.send({
+      message: "Welcome to BlogApi",
+      session: req.session,
+    });
+  }
 });
+
+
 
 app.use("/blog", require("./src/routes/blogRoute"));
 app.use("/user", require("./src/routes/user.route"));

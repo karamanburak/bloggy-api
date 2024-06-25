@@ -72,7 +72,7 @@ module.exports = {
                     if (remindMe) {
                         req.session.remindMe = remindMe
                         //* sessionu cookieye çeviriyoruz. Verdiğimiz süre kadar erişim sağlanır
-                        req.sessionOptions.maxAge = 1000 * 60 * 60 * 24 * 3;
+                        req.sessionOptions.maxAge = 1000 * 60 * 60 * 24 * 3; // 3 days
                     }
 
                     res.status(200).send({
