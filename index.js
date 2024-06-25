@@ -17,10 +17,17 @@ app.use(session({
 }))
 
 // HomePage:
+// app.all("/", (req, res) => {
+//   res.send(
+//     "<h1 style='text-align:center;margin-top:150px'>WELCOME TO BLOGGY API</h1>"
+//   );
+// });
+
 app.all("/", (req, res) => {
-  res.send(
-    "<h1 style='text-align:center;margin-top:150px'>WELCOME TO BLOGGY API</h1>"
-  );
+  res.send({
+    message: "Wellcome to Bloggy Api",
+    session: req.session
+  });
 });
 
 app.use("/blog", require("./src/routes/blogRoute"));
