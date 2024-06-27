@@ -9,12 +9,14 @@ const PORT = process.env.PORT;
 app.use(express.json());
 require("./src/configs/dbConnection");
 
-const session = require("cookie-session")
+const session = require("cookie-session");
 
-app.use(session({
-  secret: process.env.SECRET_KEY,
-  // maxAge: 1000 * 60 * 60 * 24  * 3 //* milliseconds // 3 days
-}))
+app.use(
+  session({
+    secret: process.env.SECRET_KEY,
+    // maxAge: 1000 * 60 * 60 * 24  * 3 //* milliseconds // 3 days
+  })
+);
 
 //? user control
 app.use(require("./src/middlewares/userControl"));
@@ -27,7 +29,7 @@ app.all("/", (req, res) => {
     res.send({
       message: "Welcome to BlogApi",
       session: req.session,
-      user: req.user
+      user: req.user,
     });
   } else {
     res.send({
@@ -37,8 +39,6 @@ app.all("/", (req, res) => {
   }
 });
 
-
-
 app.use("/blog", require("./src/routes/blogRoute"));
 app.use("/user", require("./src/routes/user.route"));
 
@@ -47,4 +47,4 @@ app.use(require("./src/middlewares/errorHandler"));
 
 app.listen(PORT, () => console.log("Running: http://127.0.0.1:" + PORT));
 
-// require("./src/configs/sync")() // Sadece 1 kere calismasi yeterli
+// require("./src/configs/sync")(); // Sadece 1 kere calismasi yeterli
