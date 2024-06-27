@@ -4,7 +4,8 @@ const { BlogPost, BlogCategory } = require("../models/blogModel");
 
 module.exports.BlogCategoryController = {
   list: async (req, res) => {
-    const data = await BlogCategory.find();
+    // const data = await BlogCategory.find();
+    const data = await res.getModelList.find(BlogCategory);
 
     res.status(200).send({
       error: false,
@@ -53,54 +54,54 @@ module.exports.BlogCategoryController = {
 
 module.exports.BlogPostController = {
   list: async (req, res) => {
-    //! Filtering
-    // URL?filter[key1]=value1&filter[key2]=value2 => url array parameter
-    // console.log(req.query)
-    const filter = req.query?.filter || {};
-    console.log("filter: ", filter);
+    // //! Filtering
+    // // URL?filter[key1]=value1&filter[key2]=value2 => url array parameter
+    // // console.log(req.query)
+    // const filter = req.query?.filter || {};
+    // console.log("filter: ", filter);
 
-    //* Searching => gelen ifaade içerisinde geçiyor mu geçmiyor mu
-    //https://www.mongodb.com/docs/manual/reference/operator/query/regex/
-    // URL?search[key1]=value1&search[key2]=value2 => url array parameter
+    // //* Searching => gelen ifaade içerisinde geçiyor mu geçmiyor mu
+    // //https://www.mongodb.com/docs/manual/reference/operator/query/regex/
+    // // URL?search[key1]=value1&search[key2]=value2 => url array parameter
 
-    const search = req.query?.search || {};
-    console.log("search: ", search);
-    //* { title: 'Testuser1', content: 'Testuser' } => { title: {$regex:'Testuser1'}, content:{ $regex: 'Testuser'} }
-    for (let key in search) {
-      // search["title"] = {$regex : search["title"]}
-      search[key] = { $regex: search[key] };
-    }
-    console.log("search2: ", search);
+    // const search = req.query?.search || {};
+    // console.log("search: ", search);
+    // //* { title: 'Testuser1', content: 'Testuser' } => { title: {$regex:'Testuser1'}, content:{ $regex: 'Testuser'} }
+    // for (let key in search) {
+    //   // search["title"] = {$regex : search["title"]}
+    //   search[key] = { $regex: search[key] };
+    // }
+    // console.log("search2: ", search);
 
-    //? Sorting
-    // https://mongoosejs.com/docs/api/query.html#Query.prototype.sort()
-    // URL?sort[key1]=value1&sort[key2]=value2 => url array parameter
-    // 1:A-Z - -1:desc: Z-A => deprecated
-    // asc: A-Z - desc: Z-A
-    const sort = req.query?.sort || {};
+    // //? Sorting
+    // // https://mongoosejs.com/docs/api/query.html#Query.prototype.sort()
+    // // URL?sort[key1]=value1&sort[key2]=value2 => url array parameter
+    // // 1:A-Z - -1:desc: Z-A => deprecated
+    // // asc: A-Z - desc: Z-A
+    // const sort = req.query?.sort || {};
 
-    //* Pagination
-    // url?page=3&limit=10
+    // //* Pagination
+    // // url?page=3&limit=10
 
-    // =>mongoose =>  limit() ve skip()
+    // // =>mongoose =>  limit() ve skip()
 
-    //! limit
-    let limit = Number(req.query.limit); // => limit methodu number bekler
-    limit = limit > 0 ? limit : 20; //eger limit 0 dan büyük değilse 20 olarak ataması yap
+    // //! limit
+    // let limit = Number(req.query.limit); // => limit methodu number bekler
+    // limit = limit > 0 ? limit : 20; //eger limit 0 dan büyük değilse 20 olarak ataması yap
 
-    console.log("Limit:", limit); // => Limit: 10 urlden gelen bilgiler her zaman string fomatinda olur degismez!!!
+    // console.log("Limit:", limit); // => Limit: 10 urlden gelen bilgiler her zaman string fomatinda olur degismez!!!
 
-    //? Page
-    let page = Number(req.query?.page);
-    // page = page > 0 ? page : 1;
-    page = page > 0 ? page - 1 : 0;
-    // console.log("Page:", page);
-    console.log("Typeof Page", typeof page, page);
+    // //? Page
+    // let page = Number(req.query?.page);
+    // // page = page > 0 ? page : 1;
+    // page = page > 0 ? page - 1 : 0;
+    // // console.log("Page:", page);
+    // console.log("Typeof Page", typeof page, page);
 
-    //! Skip => atlanacak veri sayisi
-    let skip = Number(req.query?.skip);
-    skip = skip > 0 ? skip : page * limit; //eger skip 0 dan büyük değilse 0 olarak ataması yap
-    console.log(typeof skip, skip);
+    // //! Skip => atlanacak veri sayisi
+    // let skip = Number(req.query?.skip);
+    // skip = skip > 0 ? skip : page * limit; //eger skip 0 dan büyük değilse 0 olarak ataması yap
+    // console.log(typeof skip, skip);
 
     // const data = await BlogPost.find({}) = BlogPost.find()
     // const data = await BlogPost.find(filter);
@@ -108,10 +109,11 @@ module.exports.BlogPostController = {
     // const [a,b,...x] = [12,13,56,6455,456] => rest
     // function(a,...x) => rest
     // const data = await BlogPost.find({ ...filter, ...search }); // spread => yayma
-    const data = await BlogPost.find({ ...filter, ...search })
-      .sort(sort)
-      .limit(limit)
-      .skip(skip);
+    // const data = await BlogPost.find({ ...filter, ...search })
+    //   .sort(sort)
+    //   .limit(limit)
+    //   .skip(skip);
+    const data = await res.getModelList(BlogPost);
 
     // const data = await BlogPost.find({ published: true, }).populate(
     //   "blogCategoryId",
