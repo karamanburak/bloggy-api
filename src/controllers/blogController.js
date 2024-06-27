@@ -5,7 +5,7 @@ const { BlogPost, BlogCategory } = require("../models/blogModel");
 module.exports.BlogCategoryController = {
   list: async (req, res) => {
     // const data = await BlogCategory.find();
-    const data = await res.getModelList.find(BlogCategory);
+    const data = await res.getModelList(BlogCategory);
 
     res.status(200).send({
       error: false,
@@ -113,8 +113,27 @@ module.exports.BlogPostController = {
     //   .sort(sort)
     //   .limit(limit)
     //   .skip(skip);
-    const data = await res.getModelList(BlogPost);
+    //! operator kullanımı => https://www.mongodb.com/docs/manual/reference/operator/query/
+    // const query = req.query?.q || '';
 
+    // const data = await BlogPost.find({
+    //   $or: [
+    //     { title: { $regex: query, $options: "i" } }, //* i => insensitive
+    //     { content: { $regex: query, $options: "i" } },
+    //   ],
+    // });
+    // const data = await res.getModelList(BlogPost, "blogCategoryId");
+    const data = await res.getModelList(BlogPost, [
+      {
+        path: "blogCategoryId",
+        select: "name -_id",
+      },
+      { path: "userId" },
+    ]);
+
+    //! populate v2 => populate({path:"blogCategoryId",select:"name -id"})
+    //! multi populate => populate([ {path: "blogCategoryId", select: "name -_id", }, { path: "userId" }, ])
+    //! multi populate => populate({path: "blogCategoryId", select: "name -_id", }).populate({ path: "userId" })
     // const data = await BlogPost.find({ published: true, }).populate(
     //   "blogCategoryId",
     //   "name -_id"
