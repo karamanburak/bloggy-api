@@ -59,8 +59,23 @@ module.exports.BlogPostController = {
     const filter = req.query?.filter || {};
     console.log("filter: ", filter);
 
+    //* Searching => gelen ifaade içerisinde geçiyor mu geçmiyor mu
+    //https://www.mongodb.com/docs/manual/reference/operator/query/regex/
+    const search = req.query?.search || {};
+    console.log("search: ", search);
+    //* { title: 'Testuser1', content: 'Testuser' } => { title: {$regex:'Testuser1'}, content:{ $regex: 'Testuser'} }
+    for (let key in search) {
+      // search["title"] = {$regex : search["title"]}
+      search[key] = { $regex: search[key] };
+    }
+    console.log("search2: ", search);
+
     // const data = await BlogPost.find({}) = BlogPost.find()
-    const data = await BlogPost.find(filter);
+    // const data = await BlogPost.find(filter);
+    // const data = await BlogPost.find({filter,search}); => {filter:{ userId: '667d10dc03839026052691ab', published: '0' },search:{ title: { '$regex': 'Testuser1' }, content: { '$regex': 'Testuser' } }} // wrong
+    // const [a,b,...x] = [12,13,56,6455,456] => rest
+    // function(a,...x) => rest
+    const data = await BlogPost.find({ ...filter, ...search }); // spread
     // const data = await BlogPost.find({ published: true, }).populate(
     //   "blogCategoryId",
     //   "name -_id"
