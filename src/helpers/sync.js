@@ -14,13 +14,12 @@ module.exports = async function () {
     console.log('- Database and all data DELETED!')
     /* REMOVE DATABASE */
 
-    const Token = require('../models/token');
+    const User = require('../models/user')
     const Category = require('../models/category');
     const Blog = require('../models/blog');
     const Comment = require('../models/comment');
 
     /* User */
-    const User = require('../models/user')
     await User.deleteMany() // !!! Clear collection.
     await User.create({
         "_id": "65343222b67e9681f937f001",
@@ -55,14 +54,18 @@ module.exports = async function () {
         "isStaff": false,
         "isAdmin": false
     })
+    console.log('Users created');
+
 
     // Create initial categories
-    //     const category1 = await Category.create({ name: 'Technology' });
-    //     const category2 = await Category.create({ name: 'World' });
-    //     const category3 = await Category.create({ name: 'Health' });
-    //     const category4 = await Category.create({ name: 'Travel' });
-    //     const category5 = await Category.create({ name: 'Sport' });
-    //     const category6 = await Category.create({ name: 'Cinema' });
+    const category1 = await Category.create({ name: 'Technology' });
+    const category2 = await Category.create({ name: 'World' });
+    const category3 = await Category.create({ name: 'Health' });
+    const category4 = await Category.create({ name: 'Travel' });
+    const category5 = await Category.create({ name: 'Sport' });
+    const category6 = await Category.create({ name: 'Cinema' });
+    console.log('Categories created');
+
 
     //     // Create initial blogs
     //     const blog1 = await Blog.create({
@@ -82,6 +85,8 @@ module.exports = async function () {
     //         image: 'https://example.com/image2.jpg',
     //         isPublish: true
     //     });
+    // console.log('Blogs created');
+
 
     //     // Create initial comments
     //     await Comment.create({
@@ -95,6 +100,8 @@ module.exports = async function () {
     //         blogId: blog2._id,
     //         comment: 'Very informative.',
     //     });
+    // console.log('Comments created');
+
 
     /* Finished */
     console.log('Initial data created');
