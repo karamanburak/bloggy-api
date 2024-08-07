@@ -4,6 +4,8 @@
 ------------------------------------------------------- */
 const express = require('express')
 const app = express()
+const morgan = require("morgan");
+
 
 /* ------------------------------------------------------- */
 // Required Modules:
@@ -23,14 +25,12 @@ require('express-async-errors')
 const { dbConnection } = require('./src/configs/dbConnection')
 dbConnection()
 
-/* ------------------------------------------------------- */
-// Middlewares:
+/* -------------------------------------------------------------------------- */
+/*                               MIDDLEWARES                                  */
+/* -------------------------------------------------------------------------- */
 
 // Accept JSON:
 app.use(express.json())
-
-// Call static uploadFile:
-app.use('/upload', express.static('./upload'))
 
 // Check Authentication:
 app.use(require('./src/middlewares/authentication'))
@@ -40,9 +40,12 @@ app.use(require('./src/middlewares/logger'))
 
 // res.getModelList():
 app.use(require('./src/middlewares/queryHandler'))
+app.use(morgan("dev"));
 
-/* ------------------------------------------------------- */
-// Routes:
+
+/* -------------------------------------------------------------------------- */
+/*                               ROUTES                                       */
+/* -------------------------------------------------------------------------- */
 
 // HomePath:
 app.all('/', (req, res) => {
@@ -58,8 +61,20 @@ app.all('/', (req, res) => {
   })
 })
 
+//* Static root
+app.use("/uploads", express.static("./uploads"));
+
+// console.log("668a947fda3efd683614df26" + Date.now());
+
 // Routes:
 app.use(require('./src/routes'))
+
+app.use((req, res, next) => {
+  res.status(404).send({
+    error: true,
+    message: "Route not found!",
+  });
+});
 
 /* ------------------------------------------------------- */
 
