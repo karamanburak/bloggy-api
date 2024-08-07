@@ -68,12 +68,12 @@ module.exports = (req, res, next) => {
                 next: page + 2,
                 total: Math.ceil(data.length / limit)
             },
-            totalRecords: data.length,
+            // totalRecords: data.length,
         }
         details.pages.next = (details.pages.next > details.pages.total ? false : details.pages.next)
         if (details.totalRecords <= limit) details.pages = false
         return details
     }
-    
+
     next()
 }

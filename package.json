@@ -21,6 +21,7 @@
     "nodemailer": "^6.9.7",
     "redoc-express": "^2.1.0",
     "swagger-autogen": "^2.23.6",
-    "swagger-ui-express": "^5.0.0"
+    "swagger-ui-express": "^5.0.0",
+    "validator": "^13.12.0"
   }
 }
