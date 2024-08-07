@@ -58,12 +58,18 @@ module.exports = async function () {
 
 
     // Create initial categories
-    const category1 = await Category.create({ name: 'Technology' });
     const category2 = await Category.create({ name: 'World' });
+    const category1 = await Category.create({ name: 'Technology' });
     const category3 = await Category.create({ name: 'Health' });
     const category4 = await Category.create({ name: 'Travel' });
     const category5 = await Category.create({ name: 'Sport' });
     const category6 = await Category.create({ name: 'Cinema' });
+    const category7 = await Category.create({ name: 'Design' });
+    const category8 = await Category.create({ name: 'Entertainment' });
+    const category9 = await Category.create({ name: 'Business' });
+    const category10 = await Category.create({ name: 'Politics' });
+    const category11 = await Category.create({ name: 'Science' });
+    const category12 = await Category.create({ name: 'Food' });
     console.log('Categories created');
 
 

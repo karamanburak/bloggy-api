@@ -8,7 +8,6 @@ This is the backend for the Bloggy App, a web application that allows users to c
 - Edit Profile: Users can update their profile information.
 - Interact with Blogs: Users can like/unlike blog posts and leave comments.
 - Drafts: Users can save blog posts as drafts and view them on their private page.
--
 
 ## Tech Stack
 
