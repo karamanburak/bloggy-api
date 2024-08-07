@@ -1,53 +1,74 @@
-"use strict";
+"use strict"
+/* -------------------------------------------------------
+    NODEJS EXPRESS | Blogyy API
+------------------------------------------------------- */
+const express = require('express')
+const app = express()
 
-const express = require("express");
-const app = express();
+/* ------------------------------------------------------- */
+// Required Modules:
 
-require("dotenv").config();
-const PORT = process.env.PORT;
+// envVariables to process.env:
+require('dotenv').config()
+const HOST = process.env?.HOST || '127.0.0.1'
+const PORT = process.env?.PORT || 8000
 
-app.use(express.json());
-require("./src/configs/dbConnection");
+// asyncErrors to errorHandler:
+require('express-async-errors')
 
-const session = require("cookie-session");
+/* ------------------------------------------------------- */
+// Configrations:
 
-app.use(
-  session({
-    secret: process.env.SECRET_KEY,
-    // maxAge: 1000 * 60 * 60 * 24  * 3 //* milliseconds // 3 days
+// Connect to DB:
+const { dbConnection } = require('./src/configs/dbConnection')
+dbConnection()
+
+/* ------------------------------------------------------- */
+// Middlewares:
+
+// Accept JSON:
+app.use(express.json())
+
+// Call static uploadFile:
+app.use('/upload', express.static('./upload'))
+
+// Check Authentication:
+app.use(require('./src/middlewares/authentication'))
+
+// Run Logger:
+app.use(require('./src/middlewares/logger'))
+
+// res.getModelList():
+app.use(require('./src/middlewares/findSearchSortPage'))
+
+/* ------------------------------------------------------- */
+// Routes:
+
+// HomePath:
+app.all('/', (req, res) => {
+  res.send({
+    error: false,
+    message: 'Welcome to Bloggy API',
+    documents: {
+      swagger: '/documents/swagger',
+      redoc: '/documents/redoc',
+      json: '/documents/json',
+    },
+    user: req.user
   })
-);
+})
 
-//? user control
-app.use(require("./src/middlewares/userControl"));
+// Routes:
+app.use(require('./src/routes'))
 
-//* Filter, Search,Sort and Pagination
-app.use(require("./src/middlewares/findSearchSortPagi"));
-// HomePage:
-// app.all('/', (req, res) => {
-//     res.send("<h1 style='text-align:center;margin-top:150px'>WELCOME TO BLOG API</h1>");
-// })
-app.all("/", (req, res) => {
-  if (req.isLogin) {
-    res.send({
-      message: "Welcome to BlogApi",
-      session: req.session,
-      user: req.user,
-    });
-  } else {
-    res.send({
-      message: "Welcome to BlogApi",
-      session: req.session,
-    });
-  }
-});
-
-app.use("/blog", require("./src/routes/blogRoute"));
-app.use("/user", require("./src/routes/user.route"));
+/* ------------------------------------------------------- */
 
 // errorHandler:
-app.use(require("./src/middlewares/errorHandler"));
+app.use(require('./src/middlewares/errorHandler'))
 
-app.listen(PORT, () => console.log("Running: http://127.0.0.1:" + PORT));
+// RUN SERVER:
+app.listen(PORT, HOST, () => console.log(`http://${HOST}:${PORT}`))
 
-// require("./src/configs/sync")(); // Sadece 1 kere calismasi yeterli
+/* ------------------------------------------------------- */
+// Syncronization (must be in commentLine):
+// require('./src/helpers/sync')() // !!! It clear database.
