@@ -16,7 +16,35 @@ const BlogSchema = new mongoose.Schema({
         ref: "Category",
         required: true
     },
-
+    title: {
+        type: String,
+        trim: true,
+        required: true,
+        unique: true
+    },
+    content: {
+        type: String,
+        trim: true,
+        required: true
+    },
+    image: [
+        {
+            type: String,
+            trim: true
+        }
+    ],
+    isPublish: {
+        type: Boolean,
+        default: true
+    },
+    likes: {
+        type: Number,
+        default: 0
+    },
+    countOfVisitors: {
+        type: Number,
+        default: 0
+    }
 }, {
     collection: "blogs",
     timestamps: true

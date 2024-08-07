@@ -67,40 +67,40 @@ module.exports = async function () {
     console.log('Categories created');
 
 
-    //     // Create initial blogs
-    //     const blog1 = await Blog.create({
-    //         userId: adminUser._id,
-    //         categoryId: category1._id,
-    //         title: 'First Blog',
-    //         content: 'This is the content of the first blog.',
-    //         image: 'https://example.com/image1.jpg',
-    //         isPublish: true
-    //     });
+    // Create initial blogs
+    const blog1 = await Blog.create({
+        userId: "65343222b67e9681f937f001",
+        categoryId: "66b341bd184b94be0d924816",
+        title: 'First Blog',
+        content: 'This is the content of the first blog.',
+        image: 'https://example.com/image1.jpg',
+        isPublish: true
+    });
 
-    //     const blog2 = await Blog.create({
-    //         userId: staffUser._id,
-    //         categoryId: category2._id,
-    //         title: 'Second Blog',
-    //         content: 'This is the content of the second blog.',
-    //         image: 'https://example.com/image2.jpg',
-    //         isPublish: true
-    //     });
-    // console.log('Blogs created');
+    const blog2 = await Blog.create({
+        userId: "65343222b67e9681f937f002",
+        categoryId: "66b341bd184b94be0d924816",
+        title: 'Second Blog',
+        content: 'This is the content of the second blog.',
+        image: 'https://example.com/image2.jpg',
+        isPublish: true
+    });
+    console.log('Blogs created');
 
 
-    //     // Create initial comments
-    //     await Comment.create({
-    //         userId: testUser._id,
-    //         blogId: blog1._id,
-    //         comment: 'Great blog!',
-    //     });
+    // Create initial comments
+    await Comment.create({
+        userId: "65343222b67e9681f937f003",
+        blogId: "66b3457b09172cb05013d9dc",
+        comment: 'Great blog!',
+    });
 
-    //     await Comment.create({
-    //         userId: adminUser._id,
-    //         blogId: blog2._id,
-    //         comment: 'Very informative.',
-    //     });
-    // console.log('Comments created');
+    await Comment.create({
+        userId: "65343222b67e9681f937f003",
+        blogId: "66b3457b09172cb05013d9dc",
+        comment: 'Very informative.',
+    });
+    console.log('Comments created');
 
 
     /* Finished */
