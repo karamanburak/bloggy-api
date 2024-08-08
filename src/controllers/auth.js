@@ -11,6 +11,20 @@ const { CustomError } = require("../errors/customError")
 
 module.exports = {
     login: async (req, res) => {
+
+        /*
+        #swagger.tags = ["Authentication"]
+        #swagger.summary = "Login"
+        #swagger.description = 'Login with username (or email) and password for get simpleToken and JWT'
+        #swagger.parameters["body"] = {
+            in: "body",
+            required: true,
+            schema: {
+                "username": "test",
+                "password": "aA?123456",
+            }
+        }
+    */
         const { username, email, password } = req.body
 
         if (password && (username || email)) {
@@ -82,6 +96,12 @@ module.exports = {
         }
     },
     refresh: async (req, res) => {
+        /*
+        #swagger.tags = ["Authentication"]
+        #swagger.summary = "JWT : Refresh"
+        #swagger.description = 'Refresh token.'
+    */
+
         const refreshToken = req.body?.bearer.refresh;
         if (refreshToken) {
             const refreshData = jwt.verify(refreshToken, process.env.REFRESH_KEY);
@@ -107,6 +127,11 @@ module.exports = {
         }
     },
     logout: async (req, res) => {
+        /*
+        #swagger.tags = ["Authentication"]
+        #swagger.summary = "simpleToken: Logout"
+        #swagger.description = 'Delete token key.'
+    */
         //* 1. yöntem (Tüm oturumlari kapatir yani tüm tokenlari siler not: userId bizim kurgumuzda unique oldugu icin!!!)
         // const deleted = await Token.deleteOne({ userId: req.user._id });
 
