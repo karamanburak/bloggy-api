@@ -1,22 +1,25 @@
-"use strict"
+"use strict";
 /* -------------------------------------------------------
     NODEJS EXPRESS | Blogyy API
 ------------------------------------------------------- */
-const router = require('express').Router()
+const router = require("express").Router();
 /* ------------------------------------------------------- */
 
-const token = require("../controllers/token")
-const permission = require("../middlewares/permissions")
-
+const token = require("../controllers/token");
+const idValidation = require("../middlewares/idValidation");
+const { isLoginAdmin } = require("../middlewares/permissions");
 
 // URL: /tokens
+router.use(isLoginAdmin);
 
-router.use(permission.isAdmin)
-
-router.route("/").get(token.list).post(token.create)
-router.route("/:id").get(token.read).put(token.update).patch(token.update).delete(token.delete)
-
-
+router.route("/").get(token.list).post(token.create);
+router
+  .route("/:id")
+  .all(idValidation)
+  .get(token.read)
+  .put(token.update)
+  .patch(token.update)
+  .delete(token.delete);
 
 /* ------------------------------------------------------- */
-module.exports = router
+module.exports = router;
