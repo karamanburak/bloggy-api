@@ -10,13 +10,13 @@ const permission = require("../middlewares/permissions");
 
 // URL: /blogs
 
-router.route("/").get(blog.list).post(blog.create);
+router.route("/").get(blog.list).post(permission.isLogin, blog.create);
 router
   .route("/:id")
-  .get(blog.read)
-  .put(blog.update)
-  .patch(blog.update)
-  .delete(blog.delete);
+  .get(permission.isAdminOrStaffOrOwn, blog.read)
+  .put(permission.isAdminOrStaffOrOwn, blog.update)
+  .patch(permission.isAdminOrStaffOrOwn, blog.update)
+  .delete(permission.isAdminOrStaffOrOwn, blog.delete);
 
 /* ------------------------------------------------------- */
 module.exports = router;

@@ -30,6 +30,7 @@ module.exports = {
 
     const blogs = await res.getModelList(Blog, customFilter, [
       { path: "userId", select: "username firstName lastName image" },
+      { path: "categoryId", select: "name" },
     ]);
     res.status(200).send({
       error: false,
