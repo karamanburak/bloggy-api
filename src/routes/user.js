@@ -6,6 +6,7 @@ const router = require("express").Router();
 /* ------------------------------------------------------- */
 
 const user = require("../controllers/user");
+const User = require("../models/user");
 const idValidation = require("../middlewares/idValidation");
 const permission = require("../middlewares/permissions");
 

@@ -1,13 +1,13 @@
-"use strict"
+"use strict";
 /* -------------------------------------------------------
     NODEJS EXPRESS | Blogyy API
 ------------------------------------------------------- */
 
-const Token = require("../models/token.js")
+const Token = require("../models/token.js");
 
 module.exports = {
-    list: async (req, res) => {
-        /*
+  list: async (req, res) => {
+    /*
         #swagger.tags = ["Tokens"]
         #swagger.summary = "List Tokens"
         #swagger.description = `
@@ -20,59 +20,46 @@ module.exports = {
             </ul>
         `
     */
-        const tokens = await res.getModelList(Token)
-        res.status(200).send({
-            error: false,
-            details: await res.getModelListDetails(Token),
-            totalRecords: tokens.length,
-            tokens
-        })
-    },
-    create: async (req, res) => {
-        /*
+    const tokens = await res.getModelList(Token);
+    res.status(200).send({
+      error: false,
+      details: await res.getModelListDetails(Token),
+      totalRecords: tokens.length,
+      tokens,
+    });
+  },
+  create: async (req, res) => {
+    /*
         #swagger.tags = ["Tokens"]
         #swagger.summary = "Create Token"
     */
-        const newToken = await Token.create(req.body)
-        res.status(201).send({
-            error: false,
-            newToken
-        })
-    },
-    read: async (req, res) => {
-        /*
+    const newToken = await Token.create(req.body);
+    res.status(201).send({
+      error: false,
+      newToken,
+    });
+  },
+  read: async (req, res) => {
+    /*
         #swagger.tags = ["Tokens"]
         #swagger.summary = "Get Single Token"
     */
-        const token = await Token.findOne({ _id: req.params.id })
-        res.status(200).send({
-            error: false,
-            token
-        })
-    },
-    update: async (req, res) => {
-        /*
-        #swagger.tags = ["Tokens"]
-        #swagger.summary = "Update Token"
-    */
-        const token = await Token.updateOne({ _id: req.params.id }, req.body, { runValidators: true })
-        res.status(202).send({
-            error: false,
-            token,
-            updatedToken: await Token.findOne({ _id: req.params.id })
-        })
-    },
-    delete: async (req, res) => {
-        /*
+    const token = await Token.findOne({ _id: req.params.id });
+    res.status(200).send({
+      error: false,
+      token,
+    });
+  },
+  delete: async (req, res) => {
+    /*
         #swagger.tags = ["Tokens"]
         #swagger.summary = "Delete Token"
     */
-        const token = await Token.deleteOne({ _id: req.params.id })
-        res.status(token.deletedCount ? 204 : 404).send({
-            error: !token.deletedCount,
-            token,
-            message: "User not found"
-        })
-    },
-
-}
+    const token = await Token.deleteOne({ _id: req.params.id });
+    res.status(token.deletedCount ? 204 : 404).send({
+      error: !token.deletedCount,
+      token,
+      message: "User not found",
+    });
+  },
+};

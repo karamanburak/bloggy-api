@@ -9,6 +9,10 @@ module.exports = {
     /*
            #swagger.tags = ["Blogs"]
            #swagger.summary = "List Blogs"
+           #swagger.parameters['author'] = {
+            in: 'query',
+            name: 'author',
+        }
            #swagger.description = `
                You can send query with endpoint for search[], sort[], page and limit.
                <ul> Examples:
@@ -18,10 +22,18 @@ module.exports = {
                </ul>
            `
        */
-    const blogs = await res.getModelList(Blog, {}, ["userId"]);
+
+    // isPublish = true
+    const customFilter = req.query?.author
+      ? { userId: req.user.author }
+      : { isPublish: true };
+
+    const blogs = await res.getModelList(Blog, customFilter, [
+      { path: "userId", select: "username firstName lastName image" },
+    ]);
     res.status(200).send({
       error: false,
-      details: await res.getModelListDetails(Blog),
+      details: await res.getModelListDetails(Blog, customFilter),
       totalRecords: blogs.length,
       blogs,
     });
@@ -37,6 +49,10 @@ module.exports = {
             }
         }
     */
+
+    // Add logined userId to req.body
+    req.body.userId = req.user?._id;
+
     const newBlog = await Blog.create(req.body);
     res.status(201).send({
       error: false,
@@ -49,7 +65,15 @@ module.exports = {
         #swagger.summary = "Get Single Blog"
     */
     // Single
-    const blog = await Blog.findOne({ _id: req.params.id }).populate("userId");
+    const blog = await Blog.findOne({ _id: req.params.id }).populate([
+      { path: "userId", select: "username firstName lastName" },
+      { path: "categoryId", select: "name" },
+      {
+        path: "comments",
+        populate: { path: "userId", select: "username firstName lastName" },
+      },
+    ]);
+
     res.status(200).send({
       error: false,
       blog,
@@ -66,9 +90,17 @@ module.exports = {
             }
         }
     */
-    const blog = await Blog.updateOne({ _id: req.params.id }, req.body, {
-      runValidators: true,
-    });
+
+    const customFilter =
+      req.user && !req.user.isAdmin ? { userId: req.user._id } : {};
+
+    const blog = await Blog.updateOne(
+      { _id: req.params.id, ...customFilter },
+      req.body,
+      {
+        runValidators: true,
+      }
+    );
     res.status(202).send({
       error: false,
       blog,
@@ -80,7 +112,11 @@ module.exports = {
         #swagger.tags = ["Blogs"]
         #swagger.summary = "Delete Blog"
     */
-    const blog = await Blog.deleteOne({ _id: req.params.id });
+
+    const customFilter =
+      req.user && !req.user.isAdmin ? { userId: req.user._id } : {};
+
+    const blog = await Blog.deleteOne({ _id: req.params.id, ...customFilter });
     res.status(blog.deletedCount ? 204 : 404).send({
       error: !blog.deletedCount,
       blog,

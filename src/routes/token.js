@@ -13,13 +13,7 @@ const { isLoginAdmin } = require("../middlewares/permissions");
 router.use(isLoginAdmin);
 
 router.route("/").get(token.list).post(token.create);
-router
-  .route("/:id")
-  .all(idValidation)
-  .get(token.read)
-  .put(token.update)
-  .patch(token.update)
-  .delete(token.delete);
+router.route("/:id").all(idValidation).get(token.read).delete(token.delete);
 
 /* ------------------------------------------------------- */
 module.exports = router;
