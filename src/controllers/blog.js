@@ -28,15 +28,15 @@ module.exports = {
       ? { userId: req.user.author }
       : { isPublish: true };
 
-    const blogs = await res.getModelList(Blog, customFilter, [
+    const data = await res.getModelList(Blog, customFilter, [
       { path: "userId", select: "username firstName lastName image" },
       { path: "categoryId", select: "name" },
     ]);
     res.status(200).send({
       error: false,
       details: await res.getModelListDetails(Blog, customFilter),
-      totalRecords: blogs.length,
-      blogs,
+      totalRecords: data.length,
+      data,
     });
   },
   create: async (req, res) => {
@@ -54,10 +54,11 @@ module.exports = {
     // Add logined userId to req.body
     req.body.userId = req.user?._id;
 
-    const newBlog = await Blog.create(req.body);
+    const data = await Blog.create(req.body);
     res.status(201).send({
       error: false,
-      newBlog,
+      message: "New Blog successfully created",
+      data,
     });
   },
   read: async (req, res) => {
@@ -66,18 +67,47 @@ module.exports = {
         #swagger.summary = "Get Single Blog"
     */
     // Single
-    const blog = await Blog.findOne({ _id: req.params.id }).populate([
+    const data = await Blog.findOne({ _id: req.params.id }).populate([
       { path: "userId", select: "username firstName lastName" },
       { path: "categoryId", select: "name" },
-      {
-        path: "comments",
-        populate: { path: "userId", select: "username firstName lastName" },
-      },
+      { path: "comments" },
     ]);
+
+    /* -------------------------------------------------------------------------- */
+    // Check if the user's ID is already in visitedUsers array
+    // if (!data.visitedUsers.includes(req.user._id)) {
+    if (
+      data.visitedUsers &&
+      Array.isArray(data.visitedUsers) &&
+      !data.visitedUsers.includes(req.user._id)
+    ) {
+      // If not, push the user's ID to visitedUsers array
+      data.visitedUsers.push(req.user._id);
+
+      // Increment countOfVisitors for the blog
+      data.countOfVisitors++;
+
+      // Save the changes
+      await data.save();
+    }
+
+    // Check if the user has visited this blog before
+    // if (!req.user.visitedBlogs.includes(req.params.id)) {
+    if (
+      req.user?.visitedBlogs &&
+      Array.isArray(req.user.visitedBlogs) &&
+      !req.user?.visitedBlogs.includes(req.params.id)
+    ) {
+      // If not, mark the blog as visited for this user
+      req.user.visitedBlogs.push(req.params.id);
+
+      // Save the changes to the user model
+      await req.user.save();
+    }
 
     res.status(200).send({
       error: false,
-      blog,
+      data,
     });
   },
   update: async (req, res) => {
@@ -95,7 +125,7 @@ module.exports = {
     const customFilter =
       req.user && !req.user.isAdmin ? { userId: req.user._id } : {};
 
-    const blog = await Blog.updateOne(
+    const data = await Blog.updateOne(
       { _id: req.params.id, ...customFilter },
       req.body,
       {
@@ -104,8 +134,12 @@ module.exports = {
     );
     res.status(202).send({
       error: false,
-      blog,
-      updatedBlog: await Blog.findOne({ _id: req.params.id }),
+      message: "Blog successfully updated",
+      data,
+      new: await Blog.findOne({ _id: req.params.id }).populate([
+        { path: "userId", select: "username firstName lastName image email" },
+        { path: "categoryId", select: "name" },
+      ]),
     });
   },
   delete: async (req, res) => {
@@ -117,11 +151,13 @@ module.exports = {
     const customFilter =
       req.user && !req.user.isAdmin ? { userId: req.user._id } : {};
 
-    const blog = await Blog.deleteOne({ _id: req.params.id, ...customFilter });
-    res.status(blog.deletedCount ? 204 : 404).send({
-      error: !blog.deletedCount,
-      blog,
-      message: "Blog not found",
+    const data = await Blog.deleteOne({ _id: req.params.id, ...customFilter });
+    res.status(data.deletedCount ? 200 : 404).send({
+      error: !data.deletedCount,
+      message: data.deletedCount
+        ? "Blog successfully deleted"
+        : "Blog not found!",
+      data,
     });
   },
 };

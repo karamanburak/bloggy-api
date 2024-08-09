@@ -19,12 +19,14 @@ module.exports = {
             </ul>
         `
     */
-    const comments = await res.getModelList(Comment);
+    const data = await res.getModelList(Comment, {}, [
+      { path: "userId", select: "username firstName lastName image" },
+    ]);
     res.status(200).send({
       error: false,
       details: await res.getModelListDetails(Comment),
-      totalRecords: comments.length,
-      comments,
+      totalRecords: data.length,
+      data,
     });
   },
   create: async (req, res) => {
@@ -39,7 +41,7 @@ module.exports = {
         }
     */
 
-    const newComment = await Comment.create(req.body);
+    const data = await Comment.create(req.body);
 
     const blog = await Blog.findById(req.body.blogId);
     blog.comments.push(newComment._id);
@@ -47,7 +49,8 @@ module.exports = {
 
     res.status(201).send({
       error: false,
-      newComment,
+      message: "Comment successfully created",
+      data,
     });
   },
   read: async (req, res) => {
@@ -56,10 +59,13 @@ module.exports = {
         #swagger.summary = "Get Single Comment"
     */
     // Single
-    const comment = await Comment.findOne({ _id: req.params.id });
+    const data = await Comment.findOne({ _id: req.params.id }).populate(
+      "userId",
+      "username firstName lastName image email"
+    );
     res.status(200).send({
       error: false,
-      comment,
+      data,
     });
   },
   update: async (req, res) => {
@@ -73,13 +79,14 @@ module.exports = {
             }
         }
     */
-    const comment = await Comment.updateOne({ _id: req.params.id }, req.body, {
+    const data = await Comment.updateOne({ _id: req.params.id }, req.body, {
       runValidators: true,
     });
     res.status(202).send({
       error: false,
-      comment,
-      updatedComment: await Comment.findOne({ _id: req.params.id }),
+      message: "Comment successfully updated",
+      data,
+      new: await Comment.findOne({ _id: req.params.id }),
     });
   },
   delete: async (req, res) => {
@@ -87,11 +94,13 @@ module.exports = {
         #swagger.tags = ["Comments"]
         #swagger.summary = "Delete Comment"
     */
-    const comment = await Comment.deleteOne({ _id: req.params.id });
-    res.status(comment.deletedCount ? 204 : 404).send({
-      error: !comment.deletedCount,
-      comment,
-      message: "Comment not found",
+    const data = await Comment.deleteOne({ _id: req.params.id });
+    res.status(data.deletedCount ? 200 : 404).send({
+      error: !data.deletedCount,
+      message: data.deletedCount
+        ? "Comment successfully deleted"
+        : "Comment not found!",
+      data,
     });
   },
 };
