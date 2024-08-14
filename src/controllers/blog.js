@@ -5,7 +5,8 @@ const sendMail = require("../helpers/sendMail");
 ------------------------------------------------------- */
 const Blog = require("../models/blog");
 const User = require("../models/user");
-
+const defaultImage =
+  "https://images.pexels.com/photos/262508/pexels-photo-262508.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500";
 module.exports = {
   list: async (req, res) => {
     /*
@@ -56,19 +57,25 @@ module.exports = {
     // Add logined userId to req.body
     req.body.userId = req.user?._id;
 
-    // console.log(req.file); //* single file
-    console.log("req.files >>", req.files); //* multi files
-    console.log(req.body);
-    if (req.files) {
-      const images = [];
-      req.files.forEach((image) => images.push("/uploads/" + image.filename)); //* upload ile gelen resimlerin ismini yakaladık
-      //* db ye kaydetmek için req.body ye ekliyoruz
-      req.body.images = req.body.images
-        ? Array.isArray(req.body.images)
-          ? [...req.body.images, ...images]
-          : [req.body.images, ...images]
-        : images; //* aynı anda hem string hem de upload olarak gönderebilsin
+    console.log(req.file); //* single file
+    if (req.file) {
+      const image = "/uploads/" + req.file.filename;
+      //* db'ye kaydetmek için req.body'ye ekliyoruz
+      req.body.image = req.body.image || image;
     }
+
+    // console.log("req.files >>", req.files); //* multi files
+    // console.log(req.body);
+    // if (req.files) {
+    //   const images = [];
+    //   req.files.forEach((image) => images.push("/uploads/" + image.filename)); //* upload ile gelen resimlerin ismini yakaladık
+    //   //* db ye kaydetmek için req.body ye ekliyoruz
+    //   req.body.images = req.body.images
+    //     ? Array.isArray(req.body.images)
+    //       ? [...req.body.images, ...images]
+    //       : [req.body.images, ...images]
+    //     : images; //* aynı anda hem string hem de upload olarak gönderebilsin
+    // }
 
     const data = await (
       await Blog.create(req.body)
@@ -161,7 +168,12 @@ module.exports = {
                 <h2 class="blog-title"> ${blogTitle}</h2>
                 <p class="blog-category">Category: ${data.categoryId.name}</p>
                 <div class="blog-image">
-                    <img src=" ${data.images[0]}" alt="Blog Image">
+                   <img src="${
+                     data.images && data.images.length > 0
+                       ? data.image
+                       : defaultImage
+                   }" alt="Blog Image">
+                   </div>
                 </div>
                                 <div class="blog-content">
                     <p>${data.content}</p>

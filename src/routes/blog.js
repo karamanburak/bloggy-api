@@ -13,13 +13,13 @@ const upload = require("../middlewares/upload");
 router
   .route("/")
   .get(blog.list)
-  .post(permission.isLogin, upload.array("images"), blog.create);
+  .post(permission.isLogin, upload.single("image"), blog.create);
 router.route("/:id/like").put(permission.isLogin, blog.toggleLike);
 router
   .route("/:id")
   .get(permission.isLogin, blog.read)
-  .put(permission.isBlogOwnerOrAdmin, upload.array("images"), blog.update)
-  .patch(permission.isBlogOwnerOrAdmin, upload.array("images"), blog.update)
+  .put(permission.isBlogOwnerOrAdmin, upload.single("image"), blog.update)
+  .patch(permission.isBlogOwnerOrAdmin, upload.single("image"), blog.update)
   .delete(permission.isBlogOwnerOrAdmin, blog.delete);
 
 /* ------------------------------------------------------- */

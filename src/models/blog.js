@@ -28,18 +28,16 @@ const BlogSchema = new mongoose.Schema(
       trim: true,
       required: true,
     },
-    // image: {
-    //   type: String,
-    //   trim: true,
-    //   required: true,
-    // },
-    images: [
-      {
-        type: String,
-        trim: true,
-        required: true,
-      },
-    ],
+    image: {
+      type: String,
+      trim: true,
+    },
+    // images: [
+    //   {
+    //     type: String,
+    //     trim: true,
+    //   },
+    // ],
     isPublish: {
       type: Boolean,
       default: true,
