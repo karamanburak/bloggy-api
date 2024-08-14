@@ -30,6 +30,8 @@ dbConnection();
 
 // Accept JSON:
 app.use(express.json());
+// Accept FromData
+app.use(express.urlencoded({ extended: false }));
 
 // Check Authentication:
 app.use(require("./src/middlewares/authentication"));

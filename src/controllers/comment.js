@@ -44,7 +44,13 @@ module.exports = {
     const data = await Comment.create(req.body);
 
     const blog = await Blog.findById(req.body.blogId);
-    blog.comments.push(newComment._id);
+    if (!blog) {
+      return res.status(404).send({
+        error: true,
+        message: "Blog not found",
+      });
+    }
+    blog.comments.push(data._id);
     await blog.save();
 
     res.status(201).send({

@@ -18,7 +18,10 @@ const getModel = (req, res, next) => {
 // URL: /users
 
 //! First Way
-router.route("/").get(permission.isLoginAdmin, user.list).post(user.create);
+router
+  .route("/")
+  .get(permission.isAdminOrStaffOrOwn, user.list)
+  .post(user.create);
 router
   .route("/:id")
   .all(idValidation)

@@ -38,7 +38,7 @@ module.exports = {
               }
           }
       */
-    const newCatdatagory = await Category.create(req.body);
+    const data = await Category.create(req.body);
     res.status(201).send({
       error: false,
       message: "Category successfull added",

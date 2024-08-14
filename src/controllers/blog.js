@@ -62,6 +62,21 @@ module.exports = {
       { path: "userId", select: "username firstName lastName email" },
       { path: "categoryId", select: "name" },
     ]);
+
+    // console.log(req.file); //* single file
+    console.log(req.files); //* multi files
+    console.log(req.body);
+    if (req.files) {
+      const images = [];
+      req.files.forEach((image) => images.push("/uploads/" + image.filename)); //* upload ile gelen resimlerin ismini yakaladık
+      //* db ye kaydetmek için req.body ye ekliyoruz
+      req.body.images = req.body.images
+        ? Array.isArray(req.body.images)
+          ? [...req.body.images, ...images]
+          : [req.body.images, ...images]
+        : images;
+    }
+
     // console.log(req.body);
     const isPublished = data.isPublish;
     const blogTitle = isPublished ? data.title : `[DRAFT] ${data.title}`;
@@ -147,7 +162,7 @@ module.exports = {
                 <h2 class="blog-title"> ${blogTitle}</h2>
                 <p class="blog-category">Category: ${data.categoryId.name}</p>
                 <div class="blog-image">
-                    <img src=" ${data.image[0]}" alt="Blog Image">
+                    <img src=" ${data.images[0]}" alt="Blog Image">
                 </div>
                                 <div class="blog-content">
                     <p>${data.content}</p>
@@ -277,16 +292,16 @@ module.exports = {
 
     const blog = await Blog.findById(req.params.id);
 
-    if (
-      req.user._id.toString() !== blog.userId.toString() &&
-      !req.user.isAdmin
-    ) {
-      return res.status(403).send({
-        error: true,
-        message:
-          "NoPermission: You must be the owner or an admin to delete this blog.",
-      });
-    }
+    // if (
+    //   req.user._id.toString() !== blog.userId.toString() &&
+    //   !req.user.isAdmin
+    // ) {
+    //   return res.status(403).send({
+    //     error: true,
+    //     message:
+    //       "NoPermission: You must be the owner or an admin to delete this blog.",
+    //   });
+    // }
 
     const customFilter =
       req.user && !req.user.isAdmin ? { userId: req.user._id } : {};

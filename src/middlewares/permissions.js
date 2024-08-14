@@ -59,31 +59,45 @@ module.exports = {
       throw new CustomError("NoPermission: You must to be Admin.", 403);
     }
   },
+  // isAdminOrStaffOrOwn: async (req, res, next) => {
+  //   // Ensure the logged-in user is admin, staff, or the owner of the blog
+
+  //   const blog = await Blog.findById(req.params.id); // Retrieve the blog using the ID from request params
+
+  //   if (!user) {
+  //     return next(new CustomError("User not found", 404));
+  //   }
+  //   // Check if the user is an admin, staff, or the blog owner
+  //   if (
+  //     !req.user.isAdmin &&
+  //     !req.user.isStaff &&
+  //     blog.userId.toString() !== req.user._id.toString()
+  //   ) {
+  //     throw new CustomError(
+  //       "NoPermission! You must be admin, staff, or the owner of the blog!",
+  //       403
+  //     );
+  //   }
+
+  //   next();
+  // },
+
   isAdminOrStaffOrOwn: async (req, res, next) => {
-    // Ensure the logged-in user is admin, staff, or the owner of the blog
+    //* User-Reservation-Passenger models
 
-    try {
-      const blog = await Blog.findById(req.params.id); // Retrieve the blog using the ID from request params
-
-      if (!blog) {
-        throw new CustomError("Blog not found", 404);
-      }
-
-      // Check if the user is an admin, staff, or the blog owner
+    if (!req.user.isAdmin && !req.user.isStaff) {
+      const checkData = await req.model.findOne({ _id: req.params.id });
       if (
-        !req.user.isAdmin &&
-        !req.user.isStaff &&
-        blog.userId.toString() !== req.user._id.toString()
+        (checkData.createdId?.toString() || checkData._id?.toString()) !=
+        req.user._id.toString()
       ) {
         throw new CustomError(
-          "NoPermission! You must be admin, staff, or the owner of the blog!",
+          "NoPermission! You must be admin or staff or own!",
           403
         );
       }
-
-      next();
-    } catch (error) {
-      next(error);
     }
+
+    next();
   },
 };
