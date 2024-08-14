@@ -3,6 +3,7 @@
     NODEJS EXPRESS | Blogyy API
 ------------------------------------------------------- */
 const Blog = require("../models/blog");
+const User = require("../models/user");
 
 module.exports = {
   list: async (req, res) => {
@@ -67,42 +68,51 @@ module.exports = {
         #swagger.summary = "Get Single Blog"
     */
     // Single
+
     const data = await Blog.findOne({ _id: req.params.id }).populate([
       { path: "userId", select: "username firstName lastName" },
       { path: "categoryId", select: "name" },
       { path: "comments" },
     ]);
 
+    data.countOfVisitors += 1;
+
+    // Save the changes
+    await data.save();
+
     /* -------------------------------------------------------------------------- */
     // Check if the user's ID is already in visitedUsers array
-    // if (!data.visitedUsers.includes(req.user._id)) {
-    if (
-      data.visitedUsers &&
-      Array.isArray(data.visitedUsers) &&
-      !data.visitedUsers.includes(req.user._id)
-    ) {
-      data.visitedUsers.push(req.user._id);
 
-      data.countOfVisitors++;
+    // if (req.user) {
+    //   // Fetch the full user document
+    //   const user = await User.findById(req.user._id);
 
-      // Save the changes
-      await data.save();
-    }
+    //   if (!user) {
+    //     return res.status(404).send({
+    //       error: true,
+    //       message: "User not found!",
+    //     });
+    //   }
 
-    // Check if the user has visited this blog before
-    // if (!req.user.visitedBlogs.includes(req.params.id)) {
-    if (
-      req.user?.visitedBlogs &&
-      Array.isArray(req.user.visitedBlogs) &&
-      !req.user?.visitedBlogs.includes(req.params.id)
-    ) {
-      // If not, mark the blog as visited for this user
-      req.user.visitedBlogs.push(req.params.id);
+    //   // Check if the user's ID is already in visitedUsers array
+    //   if (!data.visitedUsers.includes(user._id)) {
+    //     data.visitedUsers.push(user._id);
 
-      // Save the changes to the user model
-      await req.user.save();
-    }
+    //     // Save the updated blog document
+    //     await data.save();
+    //   }
 
+    //   // Initialize visitedBlogs if it doesn't exist
+    //   user.visitedBlogs = user.visitedBlogs || [];
+
+    //   // Check if the user has visited this blog before
+    //   if (!user.visitedBlogs.includes(req.params.id)) {
+    //     user.visitedBlogs.push(req.params.id);
+
+    //     // Save the updated user document
+    //     await user.save();
+    //   }
+    // }
     res.status(200).send({
       error: false,
       data,
@@ -119,6 +129,19 @@ module.exports = {
             }
         }
     */
+
+    const blog = await Blog.findById(req.params.id);
+
+    if (
+      req.user._id.toString() !== blog.userId.toString() &&
+      !req.user.isAdmin
+    ) {
+      return res.status(403).send({
+        error: true,
+        message:
+          "NoPermission: You must be the owner or an admin to update this blog.",
+      });
+    }
 
     const customFilter =
       req.user && !req.user.isAdmin ? { userId: req.user._id } : {};
@@ -145,6 +168,19 @@ module.exports = {
         #swagger.tags = ["Blogs"]
         #swagger.summary = "Delete Blog"
     */
+
+    const blog = await Blog.findById(req.params.id);
+
+    if (
+      req.user._id.toString() !== blog.userId.toString() &&
+      !req.user.isAdmin
+    ) {
+      return res.status(403).send({
+        error: true,
+        message:
+          "NoPermission: You must be the owner or an admin to delete this blog.",
+      });
+    }
 
     const customFilter =
       req.user && !req.user.isAdmin ? { userId: req.user._id } : {};

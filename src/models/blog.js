@@ -45,12 +45,12 @@ const BlogSchema = new mongoose.Schema(
         ref: "Comment",
       },
     ],
-    // likes: [
-    //   {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "User",
-    //   },
-    // ],
+    likes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
     countOfVisitors: {
       type: Number,
       default: 0,

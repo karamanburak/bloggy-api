@@ -5,6 +5,7 @@
 // Middleware: permissions
 
 const { CustomError } = require("../errors/customError");
+const Blog = require("../models/blog");
 
 module.exports = {
   isLogin: (req, res, next) => {
@@ -59,21 +60,30 @@ module.exports = {
     }
   },
   isAdminOrStaffOrOwn: async (req, res, next) => {
-    //* User-Reservation-Passenger models
+    // Ensure the logged-in user is admin, staff, or the owner of the blog
 
-    if (!req.user.isAdmin && !req.user.isStaff) {
-      const checkData = await req.model.findOne({ _id: req.params.id });
+    try {
+      const blog = await Blog.findById(req.params.id); // Retrieve the blog using the ID from request params
+
+      if (!blog) {
+        throw new CustomError("Blog not found", 404);
+      }
+
+      // Check if the user is an admin, staff, or the blog owner
       if (
-        (checkData.createdId?.toString() || checkData._id?.toString()) !=
-        req.user._id.toString()
+        !req.user.isAdmin &&
+        !req.user.isStaff &&
+        blog.userId.toString() !== req.user._id.toString()
       ) {
         throw new CustomError(
-          "NoPermission! You must be admin or staff or own!",
+          "NoPermission! You must be admin, staff, or the owner of the blog!",
           403
         );
       }
-    }
 
-    next();
+      next();
+    } catch (error) {
+      next(error);
+    }
   },
 };

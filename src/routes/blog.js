@@ -13,7 +13,7 @@ const permission = require("../middlewares/permissions");
 router.route("/").get(blog.list).post(permission.isLogin, blog.create);
 router
   .route("/:id")
-  .get(permission.isAdminOrStaffOrOwn, blog.read)
+  .get(permission.isLogin, blog.read)
   .put(permission.isAdminOrStaffOrOwn, blog.update)
   .patch(permission.isAdminOrStaffOrOwn, blog.update)
   .delete(permission.isAdminOrStaffOrOwn, blog.delete);
