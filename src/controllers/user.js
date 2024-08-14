@@ -1,4 +1,5 @@
 "use strict";
+const sendMail = require("../helpers/sendMail");
 /* -------------------------------------------------------
     NODEJS EXPRESS | Blogyy API
 ------------------------------------------------------- */
@@ -33,6 +34,12 @@ module.exports = {
          #swagger.summary = "Create User"
      */
     const data = await User.create(req.body);
+
+    sendMail(
+      data.email,
+      "Welcome to the Bloggy Website",
+      `<h1>Welcome ${data.username}</h1> <p>Your account successfully created</p>`
+    );
     res.status(201).send({
       error: false,
       message: "User successfully created",

@@ -1,4 +1,5 @@
 "use strict";
+const sendMail = require("../helpers/sendMail");
 /* -------------------------------------------------------
     NODEJS EXPRESS | Blogyy API
 ------------------------------------------------------- */
@@ -55,7 +56,112 @@ module.exports = {
     // Add logined userId to req.body
     req.body.userId = req.user?._id;
 
-    const data = await Blog.create(req.body);
+    const data = await (
+      await Blog.create(req.body)
+    ).populate([
+      { path: "userId", select: "username firstName lastName email" },
+      { path: "categoryId", select: "name" },
+    ]);
+    // console.log(req.body);
+    const isPublished = data.isPublish;
+    const blogTitle = isPublished ? data.title : `[DRAFT] ${data.title}`;
+
+    // Send email when new blog is created
+    sendMail(
+      req.user.email,
+      "Blog successfully created",
+      `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Your New Blog Post on Blogyy</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                color: #333;
+                margin: 0;
+                padding: 0;
+            }
+            .email-container {
+                max-width: 600px;
+                margin: 20px auto;
+                background-color: #ffffff;
+                border-radius: 8px;
+                overflow: hidden;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+            .email-header {
+                background-color: #007BFF;
+                color: #ffffff;
+                padding: 20px;
+                text-align: center;
+            }
+            .email-body {
+                padding: 20px;
+            }
+            .email-footer {
+                background-color: #f4f4f4;
+                padding: 10px;
+                text-align: center;
+                font-size: 12px;
+                color: #777;
+            }
+            .blog-title {
+                color: #007BFF;
+                font-size: 24px;
+                margin-bottom: 10px;
+            }
+            .blog-category {
+                font-size: 16px;
+                color: #666;
+                margin-bottom: 20px;
+            }
+            .blog-content {
+                font-size: 14px;
+                line-height: 1.6;
+                color: #333;
+            }
+            .blog-image {
+                margin: 20px 0;
+                text-align: center;
+            }
+            .blog-image img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 8px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="email-container">
+            <div class="email-header">
+                <h1>${
+                  isPublished
+                    ? "Congratulations on Publishing Your New Blog!"
+                    : "Your Draft Blog Post on Blogyy"
+                }</h1>
+            </div>
+            <div class="email-body">
+                <h2 class="blog-title"> ${blogTitle}</h2>
+                <p class="blog-category">Category: ${data.categoryId.name}</p>
+                <div class="blog-image">
+                    <img src=" ${data.image[0]}" alt="Blog Image">
+                </div>
+                                <div class="blog-content">
+                    <p>${data.content}</p>
+                </div>
+                <p>Thank you for sharing your thoughts with the world through Blogyy!</p>
+            </div>
+            <div class="email-footer">
+                <p>Blogyy &copy; 2024 | All Rights Reserved</p>
+            </div>
+        </div>
+    </body>
+    </html>`
+    );
+
     res.status(201).send({
       error: false,
       message: "New Blog successfully created",

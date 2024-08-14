@@ -4,10 +4,10 @@
     "version": "1.0.0",
     "title": "REST API",
     "description": "Bloggy Api Backend",
-    "termsOfService": "http://www.clarusway.com/#",
+    "termsOfService": "",
     "contact": {
       "name": "Burak Karaman",
-      "email": "anthony@clarusway.com"
+      "email": "karaman.buraak@gmail.com"
     },
     "license": {
       "name": "ISC Licence"
@@ -181,8 +181,8 @@
           }
         ],
         "responses": {
-          "204": {
-            "description": "No Content"
+          "200": {
+            "description": "OK"
           },
           "404": {
             "description": "Not Found"
@@ -257,26 +257,6 @@
           }
         }
       },
-      "put": {
-        "tags": [
-          "Tokens"
-        ],
-        "summary": "Update Token",
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "Accepted"
-          }
-        }
-      },
       "delete": {
         "tags": [
           "Tokens"
@@ -299,26 +279,6 @@
             "description": "Not Found"
           }
         }
-      },
-      "patch": {
-        "tags": [
-          "Tokens"
-        ],
-        "summary": "Update Token",
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "202": {
-            "description": "Accepted"
-          }
-        }
       }
     },
     "/blogs/": {
@@ -328,6 +288,13 @@
         ],
         "summary": "List Blogs",
         "description": "\r  You can send query with endpoint for search[], sort[], page and limit.\r  <ul> Examples:\r   <li>URL/?<b>search[field1]=value1&search[field2]=value2</b></li>\r   <li>URL/?<b>sort[field1]=1&sort[field2]=-1</b></li>\r   <li>URL/?<b>page=2&limit=1</b></li>\r  </ul>\r  ",
+        "parameters": [
+          {
+            "name": "author",
+            "in": "query",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -354,6 +321,28 @@
         "responses": {
           "201": {
             "description": "Created"
+          }
+        }
+      }
+    },
+    "/blogs/{id}/like": {
+      "put": {
+        "tags": [
+          "Blogs"
+        ],
+        "summary": "Toggle Like on Blog",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -405,6 +394,9 @@
         "responses": {
           "202": {
             "description": "Accepted"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       },
@@ -423,8 +415,11 @@
           }
         ],
         "responses": {
-          "204": {
-            "description": "No Content"
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
           },
           "404": {
             "description": "Not Found"
@@ -457,6 +452,9 @@
         "responses": {
           "202": {
             "description": "Accepted"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       }
@@ -563,8 +561,8 @@
           }
         ],
         "responses": {
-          "204": {
-            "description": "No Content"
+          "200": {
+            "description": "OK"
           },
           "404": {
             "description": "Not Found"
@@ -703,8 +701,8 @@
           }
         ],
         "responses": {
-          "204": {
-            "description": "No Content"
+          "200": {
+            "description": "OK"
           },
           "404": {
             "description": "Not Found"
