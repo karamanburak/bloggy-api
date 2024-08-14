@@ -11,6 +11,7 @@ const permission = require("../middlewares/permissions");
 // URL: /blogs
 
 router.route("/").get(blog.list).post(permission.isLogin, blog.create);
+router.route("/:id/like").put(permission.isLogin, blog.toggleLike);
 router
   .route("/:id")
   .get(permission.isLogin, blog.read)

@@ -194,4 +194,33 @@ module.exports = {
       data,
     });
   },
+
+  toggleLike: async (req, res) => {
+    /*
+        #swagger.tags = ["Blogs"]
+        #swagger.summary = "Toggle Like on Blog"
+    */
+
+    const blog = await Blog.findById(req.params.id);
+
+    // Check if the user has already liked the blog
+    const userId = req.user._id;
+    const hasLiked = blog.likes.includes(userId);
+
+    if (hasLiked) {
+      blog.likes.pull(userId);
+    } else {
+      blog.likes.push(userId);
+    }
+
+    await blog.save();
+
+    res.status(200).send({
+      error: false,
+      message: hasLiked
+        ? "Blog unliked successfully"
+        : "Blog liked successfully",
+      data: blog,
+    });
+  },
 };
