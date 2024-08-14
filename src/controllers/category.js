@@ -74,7 +74,7 @@ module.exports = {
     res.status(202).send({
       error: false,
       message: "Category successfully updated",
-      data,
+      new: data,
       new: await Category.findOne({ _id: req.params.id }),
     });
   },

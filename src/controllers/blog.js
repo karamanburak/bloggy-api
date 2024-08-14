@@ -81,10 +81,8 @@ module.exports = {
       Array.isArray(data.visitedUsers) &&
       !data.visitedUsers.includes(req.user._id)
     ) {
-      // If not, push the user's ID to visitedUsers array
       data.visitedUsers.push(req.user._id);
 
-      // Increment countOfVisitors for the blog
       data.countOfVisitors++;
 
       // Save the changes
@@ -135,7 +133,7 @@ module.exports = {
     res.status(202).send({
       error: false,
       message: "Blog successfully updated",
-      data,
+      new: data,
       new: await Blog.findOne({ _id: req.params.id }).populate([
         { path: "userId", select: "username firstName lastName image email" },
         { path: "categoryId", select: "name" },

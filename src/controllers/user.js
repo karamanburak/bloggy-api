@@ -62,7 +62,7 @@ module.exports = {
     res.status(202).send({
       error: false,
       message: "User successfully updated",
-      data,
+      new: data,
       new: await User.findOne({ _id: req.params.id }),
     });
   },

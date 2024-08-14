@@ -85,7 +85,7 @@ module.exports = {
     res.status(202).send({
       error: false,
       message: "Comment successfully updated",
-      data,
+      new: data,
       new: await Comment.findOne({ _id: req.params.id }),
     });
   },
