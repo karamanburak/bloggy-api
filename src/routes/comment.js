@@ -19,9 +19,9 @@ router
   .route("/:id")
   .all(idValidation)
   .get(comment.read)
-  .put(permission.isAdminOrStaffOrOwn, comment.update)
-  .patch(permission.isAdminOrStaffOrOwn, comment.update)
-  .delete(permission.isAdminOrStaffOrOwn, comment.delete);
+  .put(permission.isCommentOwnerOrAdmin, comment.update)
+  .patch(permission.isCommentOwnerOrAdmin, comment.update)
+  .delete(permission.isCommentOwnerOrAdmin, comment.delete);
 
 /* ------------------------------------------------------- */
 module.exports = router;

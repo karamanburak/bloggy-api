@@ -5,7 +5,9 @@
 // Middleware: permissions
 
 const { CustomError } = require("../errors/customError");
+const User = require("../models/user");
 const Blog = require("../models/blog");
+const Comment = require("../models/comment");
 
 module.exports = {
   isLogin: (req, res, next) => {
@@ -31,7 +33,6 @@ module.exports = {
     }
   },
   isLoginAdmin: (req, res, next) => {
-    if (process.env.NODE_ENV == "development") return next(); //* development ortmaında permissionlara takılmamk için
     if (req.user && req.user.isActive && req.user.isAdmin) {
       next();
     } else {
@@ -59,45 +60,40 @@ module.exports = {
       throw new CustomError("NoPermission: You must to be Admin.", 403);
     }
   },
-  // isAdminOrStaffOrOwn: async (req, res, next) => {
-  //   // Ensure the logged-in user is admin, staff, or the owner of the blog
 
-  //   const blog = await Blog.findById(req.params.id); // Retrieve the blog using the ID from request params
-
-  //   if (!user) {
-  //     return next(new CustomError("User not found", 404));
-  //   }
-  //   // Check if the user is an admin, staff, or the blog owner
-  //   if (
-  //     !req.user.isAdmin &&
-  //     !req.user.isStaff &&
-  //     blog.userId.toString() !== req.user._id.toString()
-  //   ) {
-  //     throw new CustomError(
-  //       "NoPermission! You must be admin, staff, or the owner of the blog!",
-  //       403
-  //     );
-  //   }
-
-  //   next();
-  // },
-
-  isAdminOrStaffOrOwn: async (req, res, next) => {
-    //* User-Reservation-Passenger models
-
-    if (!req.user.isAdmin && !req.user.isStaff) {
-      const checkData = await req.model.findOne({ _id: req.params.id });
-      if (
-        (checkData.createdId?.toString() || checkData._id?.toString()) !=
-        req.user._id.toString()
-      ) {
-        throw new CustomError(
-          "NoPermission! You must be admin or staff or own!",
-          403
-        );
-      }
+  isUserOwnerOrAdmin: async (req, res, next) => {
+    const user = await User.findById(req.params.id);
+    if (req.user.isAdmin || String(user._id) === String(req.user._id)) {
+      next();
+    } else {
+      throw new CustomError(
+        "No Permission: Only admin or owner can perform this action!",
+        403
+      );
     }
+  },
 
-    next();
+  isBlogOwnerOrAdmin: async (req, res, next) => {
+    const blog = await Blog.findById(req.params.id);
+    if (req.user.isAdmin || String(blog.userId) === String(req.user._id)) {
+      next();
+    } else {
+      throw new CustomError(
+        "No Permission: Only admin or owner can perform this action!",
+        403
+      );
+    }
+  },
+
+  isCommentOwnerOrAdmin: async (req, res, next) => {
+    const comment = await Comment.findById(req.params.id);
+    if (req.user.isAdmin || String(comment.userId) === String(req.user._id)) {
+      next();
+    } else {
+      throw new CustomError(
+        "No Permission: Only admin or owner can perform this action!",
+        403
+      );
+    }
   },
 };

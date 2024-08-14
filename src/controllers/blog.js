@@ -56,15 +56,8 @@ module.exports = {
     // Add logined userId to req.body
     req.body.userId = req.user?._id;
 
-    const data = await (
-      await Blog.create(req.body)
-    ).populate([
-      { path: "userId", select: "username firstName lastName email" },
-      { path: "categoryId", select: "name" },
-    ]);
-
     // console.log(req.file); //* single file
-    console.log(req.files); //* multi files
+    console.log("req.files >>", req.files); //* multi files
     console.log(req.body);
     if (req.files) {
       const images = [];
@@ -74,9 +67,15 @@ module.exports = {
         ? Array.isArray(req.body.images)
           ? [...req.body.images, ...images]
           : [req.body.images, ...images]
-        : images;
+        : images; //* aynı anda hem string hem de upload olarak gönderebilsin
     }
 
+    const data = await (
+      await Blog.create(req.body)
+    ).populate([
+      { path: "userId", select: "username firstName lastName email" },
+      { path: "categoryId", select: "name" },
+    ]);
     // console.log(req.body);
     const isPublished = data.isPublish;
     const blogTitle = isPublished ? data.title : `[DRAFT] ${data.title}`;

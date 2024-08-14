@@ -20,14 +20,14 @@ const getModel = (req, res, next) => {
 //! First Way
 router
   .route("/")
-  .get(permission.isAdminOrStaffOrOwn, user.list)
+  .get(permission.isUserOwnerOrAdmin, user.list)
   .post(user.create);
 router
   .route("/:id")
   .all(idValidation)
-  .get(getModel, permission.isAdminOrStaffOrOwn, user.read)
-  .put(getModel, permission.isAdminOrStaffOrOwn, user.update)
-  .patch(getModel, permission.isAdminOrStaffOrOwn, user.update)
+  .get(getModel, permission.isUserOwnerOrAdmin, user.read)
+  .put(getModel, permission.isUserOwnerOrAdmin, user.update)
+  .patch(getModel, permission.isUserOwnerOrAdmin, user.update)
   .delete(permission.isLoginAdmin, user.delete);
 
 // //! Second Way
