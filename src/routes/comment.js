@@ -11,10 +11,7 @@ const permission = require("../middlewares/permissions");
 
 // URL: /comments
 
-router
-  .route("/")
-  .get(permission.isLoginStaffOrAdmin, comment.list)
-  .post(comment.create);
+router.route("/").get(comment.list).post(comment.create);
 router
   .route("/:id")
   .all(idValidation)
