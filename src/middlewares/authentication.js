@@ -3,7 +3,7 @@
     NODEJS EXPRESS | Blogyy API
 ------------------------------------------------------- */
 const jwt = require("jsonwebtoken");
-const Token = require("./models/token");
+const Token = require("../models/token");
 
 module.exports = async (req, res, next) => {
   const auth = req.headers?.authorization;
