@@ -14,7 +14,7 @@ router
   .route("/")
   .get(blog.list)
   .post(permission.isLogin, upload.single("image"), blog.create);
-router.route("/:id/like").put(permission.isLogin, blog.toggleLike);
+router.route("/:id/postLike").post(permission.isLogin, blog.toggleLike);
 router
   .route("/:id")
   .get(permission.isLogin, blog.read)
