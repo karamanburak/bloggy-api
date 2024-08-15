@@ -207,8 +207,7 @@ module.exports = {
       { path: "comments" },
     ]);
 
-    data.countOfVisitors += 1;
-
+    data.countOfVisitors = (data.countOfVisitors || 0) + 1;
     // Save the changes
     await data.save();
 

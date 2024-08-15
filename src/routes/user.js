@@ -6,14 +6,8 @@ const router = require("express").Router();
 /* ------------------------------------------------------- */
 
 const user = require("../controllers/user");
-const User = require("../models/user");
 const idValidation = require("../middlewares/idValidation");
 const permission = require("../middlewares/permissions");
-
-const getModel = (req, res, next) => {
-  req.model = User;
-  next();
-};
 
 // URL: /users
 
@@ -24,11 +18,11 @@ router
   .post(user.create);
 router
   .route("/:id")
-  .all(idValidation)
-  .get(getModel, permission.isUserOwnerOrAdmin, user.read)
-  .put(getModel, permission.isUserOwnerOrAdmin, user.update)
-  .patch(getModel, permission.isUserOwnerOrAdmin, user.update)
-  .delete(permission.isLoginAdmin, user.delete);
+  .all(idValidation, permission.isUserOwnerOrAdmin)
+  .get(user.read)
+  .put(user.update)
+  .patch(user.update)
+  .delete(user.delete);
 
 // //! Second Way
 // router.route('/(:id)')
