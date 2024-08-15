@@ -13,7 +13,7 @@
       "name": "ISC Licence"
     }
   },
-  "host": "https://bloggy-api-v8e5.onrender.com",
+  "host": "bloggy-api-v8e5.onrender.com",
   "basePath": "/",
   "schemes": [
     "http",

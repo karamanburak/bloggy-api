@@ -5,10 +5,18 @@
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
+const cors = require("cors");
 
 /* ------------------------------------------------------- */
-// Required Modules:
+//* cors
+app.use(cors()); // all clients
 
+app.use(
+  cors({
+    origin: ["https://bloggiie.vercel.app", "http://localhost:3000"],
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  })
+);
 // envVariables to process.env:
 require("dotenv").config();
 const PORT = process.env?.PORT || 8000;
