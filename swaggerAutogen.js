@@ -19,7 +19,7 @@ const document = {
     license: { name: packageJson.license },
   },
   // host: `${HOST}:${PORT}`,
-  host: `https://bloggy-api-v8e5.onrender.com`,
+  host: `bloggy-api-v8e5.onrender.com`,
   basePath: "/",
   schemes: ["http", "https"],
   consumes: ["application/json"],
