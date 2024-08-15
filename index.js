@@ -11,7 +11,6 @@ const morgan = require("morgan");
 
 // envVariables to process.env:
 require("dotenv").config();
-const HOST = process.env?.HOST || "127.0.0.1";
 const PORT = process.env?.PORT || 8000;
 
 // asyncErrors to errorHandler:
@@ -82,8 +81,7 @@ app.use((req, res, next) => {
 app.use(require("./src/middlewares/errorHandler"));
 
 // RUN SERVER:
-app.listen(PORT, HOST, () => console.log(`http://${HOST}:${PORT}`));
-
+app.listen(PORT, () => console.log("http://127.0.0.1:" + PORT));
 /* ------------------------------------------------------- */
 // Syncronization (must be in commentLine):
 // require("./src/helpers/sync")(); // !!! It clear database.
