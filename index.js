@@ -9,11 +9,15 @@ const cors = require("cors");
 
 /* ------------------------------------------------------- */
 //* cors
-app.use(cors()); // all clients
+// app.use(cors()); // all clients
 
 app.use(
   cors({
-    origin: ["https://bloggiie.vercel.app", "http://localhost:3000"],
+    origin: [
+      "https://bloggiie.vercel.app",
+      "http://localhost:3000",
+      "http://localhost:5173",
+    ],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   })
 );

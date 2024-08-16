@@ -18,7 +18,7 @@ module.exports = {
     }
   },
   isLoginStaffOrAdmin: (req, res, next) => {
-    if (process.env.NODE_ENV == "development") return next();
+    // if (process.env.NODE_ENV == "development") return next();
     if (
       req.user &&
       req.user.isActive &&

@@ -202,9 +202,15 @@ module.exports = {
     // Single
 
     const data = await Blog.findOne({ _id: req.params.id }).populate([
-      { path: "userId", select: "username firstName lastName" },
+      { path: "userId", select: "username firstName lastName image" },
       { path: "categoryId", select: "name" },
-      { path: "comments" },
+      {
+        path: "comments",
+        populate: {
+          path: "userId",
+          select: "username firstName lastName image",
+        },
+      },
     ]);
 
     data.countOfVisitors = (data.countOfVisitors || 0) + 1;
