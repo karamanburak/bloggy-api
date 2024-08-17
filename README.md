@@ -1,4 +1,10 @@
 # Bloggy App Backend
+
+- [Bloggy Api Live](https://bloggy-api-v8e5.onrender.com/)
+- [Bloggy App Live](https://bloggiie.vercel.app/)
+
+## Description
+
 This is the backend for the Bloggy App, a web application that allows users to create, edit, and interact with blog posts. This backend handles user authentication, blog management, and interactions using Node.js, Express, and MongoDB.
 
 ## Features
@@ -27,23 +33,22 @@ This is the backend for the Bloggy App, a web application that allows users to c
 
 ### User Profile
 
-| Method |     Url       |                   Description                       | Sample Valid Request Body |
-| ------ | ------------- | --------------------------------------------------- | ------------------------- |
-| GET    | /api/user/:id | Get the current user's profile                      |                           |
-| PUT    | /api/user/:id |Update user (If profile belongs to logged in user)   | [JSON](#userupdate)       |
-
+| Method | Url           | Description                                        | Sample Valid Request Body |
+| ------ | ------------- | -------------------------------------------------- | ------------------------- |
+| GET    | /api/user/:id | Get the current user's profile                     |                           |
+| PUT    | /api/user/:id | Update user (If profile belongs to logged in user) | [JSON](#userupdate)       |
 
 ### Interactions
 
-| Method |          Url            |                  Description              | Sample Valid Request Body |
-| ------ | ----------------------- | ----------------------------------------- | ------------------------- |
-| GET    | api/comments/           | Get all comments                          |                           |
-| POST   | api/comments/           | Comment on a blog post                    | [JSON](#postcomment)      |
-| POST   | /api/blogs/:id/postLike | Like and dislike a blog (if there is a user)  |                       |
+| Method | Url                     | Description                                  | Sample Valid Request Body |
+| ------ | ----------------------- | -------------------------------------------- | ------------------------- |
+| GET    | api/comments/           | Get all comments                             |                           |
+| POST   | api/comments/           | Comment on a blog post                       | [JSON](#postcomment)      |
+| POST   | /api/blogs/:id/postLike | Like and dislike a blog (if there is a user) |                           |
 
 ### Blog Posts
 
-| Method |         Url          |                   Description                | Sample Valid Request Body |
+| Method | Url                  | Description                                  | Sample Valid Request Body |
 | ------ | -------------------- | -------------------------------------------- | ------------------------- |
 | GET    | /api/blogs           | Get all public blog posts                    |                           |
 | GET    | /api/blogs?author=id | Get all draft blog posts of the current user |                           |
@@ -160,3 +165,10 @@ This is the backend for the Bloggy App, a web application that allows users to c
   "comment": "Master"
 }
 ```
+
+## Documentations
+
+[View Postman Documentation](https://documenter.getpostman.com/view/32987022/2sA3s9BnRX#677d706d-bc2c-401f-9808-d56288077f3a)
+[View Swagger Documentation](https://bloggy-api-v8e5.onrender.com/documents/swagger/)
+[View Redoc Documentation](https://bloggy-api-v8e5.onrender.com/documents/redoc)
+[View Json Documentation](https://bloggy-api-v8e5.onrender.com/documents/json)
