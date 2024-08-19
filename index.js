@@ -8,6 +8,12 @@ const morgan = require("morgan");
 const cors = require("cors");
 
 /* ------------------------------------------------------- */
+//* cron job
+const job = require("./src/helpers/cron");
+console.log("Cron job is being started...");
+// Start the cron job
+job.start();
+
 //* cors
 // app.use(cors()); // all clients
 

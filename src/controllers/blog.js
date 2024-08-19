@@ -28,7 +28,7 @@ module.exports = {
 
     // isPublish = true
     const customFilter = req.query?.author
-      ? { userId: req.user.author }
+      ? { userId: req.user._id }
       : { isPublish: true };
 
     const data = await res.getModelList(Blog, customFilter, [
@@ -37,7 +37,7 @@ module.exports = {
     ]);
     res.status(200).send({
       error: false,
-      details: await res.getModelListDetails(Blog, customFilter),
+      details: await res.getModelListDetails(Blog),
       totalRecords: data.length,
       data,
     });
@@ -200,8 +200,8 @@ module.exports = {
         #swagger.summary = "Get Single Blog"
     */
     // Single
-
-    const data = await Blog.findOne({ _id: req.params.id }).populate([
+    const blogId = req.params.id;
+    const data = await Blog.findById(blogId).populate([
       { path: "userId", select: "username firstName lastName image" },
       { path: "categoryId", select: "name" },
       {
@@ -212,6 +212,20 @@ module.exports = {
         },
       },
     ]);
+
+    if (!data) {
+      return res.status(404).send({
+        error: true,
+        message: "Blog not found!",
+      });
+    }
+
+    if (!data.isPublish && !data.userId.equals(req.user._id)) {
+      return res.status(403).send({
+        error: true,
+        message: "You do not have permission to view this draft blog.",
+      });
+    }
 
     data.countOfVisitors = (data.countOfVisitors || 0) + 1;
     // Save the changes
@@ -308,16 +322,16 @@ module.exports = {
 
     const blog = await Blog.findById(req.params.id);
 
-    // if (
-    //   req.user._id.toString() !== blog.userId.toString() &&
-    //   !req.user.isAdmin
-    // ) {
-    //   return res.status(403).send({
-    //     error: true,
-    //     message:
-    //       "NoPermission: You must be the owner or an admin to delete this blog.",
-    //   });
-    // }
+    if (
+      req.user._id.toString() !== blog.userId.toString() &&
+      !req.user.isAdmin
+    ) {
+      return res.status(403).send({
+        error: true,
+        message:
+          "NoPermission: You must be the owner or an admin to delete this blog.",
+      });
+    }
 
     const customFilter =
       req.user && !req.user.isAdmin ? { userId: req.user._id } : {};
