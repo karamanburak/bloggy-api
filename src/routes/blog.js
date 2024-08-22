@@ -17,7 +17,7 @@ router
 router.route("/:id/postLike").post(permission.isLogin, blog.toggleLike);
 router
   .route("/:id")
-  .get(permission.isLogin, blog.read)
+  .get(blog.read)
   .put(permission.isBlogOwnerOrAdmin, upload.single("image"), blog.update)
   .patch(permission.isBlogOwnerOrAdmin, upload.single("image"), blog.update)
   .delete(permission.isBlogOwnerOrAdmin, blog.delete);
