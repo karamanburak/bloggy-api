@@ -1,6 +1,6 @@
 # Bloggy App Backend
 
-- [Bloggy Api Live](https://bloggy-api-v8e5.onrender.com/)
+- [Bloggy Api Live](https://bloggy-api-xa7p.onrender.com/)
 - [Bloggy App Live](https://bloggiie.vercel.app/)
 
 ## Description
