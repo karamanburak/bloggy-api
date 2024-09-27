@@ -13,7 +13,7 @@
       "name": "ISC Licence"
     }
   },
-  "host": "bloggy-api-v8e5.onrender.com",
+  "host": "bloggy-api-xa7p.onrender.com",
   "basePath": "/",
   "schemes": [
     "http",
@@ -365,6 +365,12 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       },
@@ -417,6 +423,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
           },
           "404": {
             "description": "Not Found"

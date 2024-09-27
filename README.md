@@ -169,6 +169,6 @@ This is the backend for the Bloggy App, a web application that allows users to c
 ## Documentations
 
 [View Postman Documentation](https://documenter.getpostman.com/view/32987022/2sA3s9BnRX#677d706d-bc2c-401f-9808-d56288077f3a)
-[View Swagger Documentation](https://bloggy-api-v8e5.onrender.com/documents/swagger/)
-[View Redoc Documentation](https://bloggy-api-v8e5.onrender.com/documents/redoc)
-[View Json Documentation](https://bloggy-api-v8e5.onrender.com/documents/json)
+[View Swagger Documentation](https://bloggy-api-xa7p.onrender.com/documents/swagger/)
+[View Redoc Documentation](https://bloggy-api-xa7p.onrender.com/documents/redoc)
+[View Json Documentation](https://bloggy-api-xa7p.onrender.com/documents/json)
