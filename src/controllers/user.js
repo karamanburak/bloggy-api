@@ -4,6 +4,7 @@ const sendMail = require("../helpers/sendMail");
     NODEJS EXPRESS | Blogyy API
 ------------------------------------------------------- */
 const User = require("../models/user");
+const { CustomError } = require("../errors/customError");
 
 module.exports = {
   list: async (req, res) => {
@@ -32,8 +33,41 @@ module.exports = {
     /*
          #swagger.tags = ["Users"]
          #swagger.summary = "Create User"
+         #swagger.description = 'Register a new user with username, email, password, and confirmPassword'
+         #swagger.parameters["body"] = {
+            in: "body",
+            required: true,
+            schema: {
+                "username": "testuser",
+                "email": "test@example.com",
+                "password": "aA?123456",
+                "confirmPassword": "aA?123456",
+            }
+        }
      */
-    const data = await User.create(req.body);
+    const { username, email, password, confirmPassword } = req.body;
+
+    // Validate required fields
+    if (!username || !email || !password || !confirmPassword) {
+      throw new CustomError(
+        "Please provide username, email, password, and confirmPassword",
+        400
+      );
+    }
+
+    // Validate password match
+    if (password !== confirmPassword) {
+      throw new CustomError("Password and confirmPassword do not match", 400);
+    }
+
+    // Create user with only allowed fields
+    const userData = {
+      username,
+      email,
+      password,
+    };
+
+    const data = await User.create(userData);
 
     sendMail(
       data.email,

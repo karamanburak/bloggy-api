@@ -14,7 +14,7 @@ module.exports = {
     /*
         #swagger.tags = ["Authentication"]
         #swagger.summary = "Login"
-        #swagger.description = 'Login with username (or email) and password for get simpleToken and JWT'
+        #swagger.description = 'Login with username or email and password for get simpleToken and JWT'
         #swagger.parameters["body"] = {
             in: "body",
             required: true,
@@ -23,13 +23,32 @@ module.exports = {
                 "password": "aA?123456",
             }
         }
+        #swagger.parameters["body"] = {
+            in: "body",
+            required: true,
+            schema: {
+                "email": "test@example.com",
+                "password": "aA?123456",
+            }
+        }
     */
     const { username, email, password } = req.body;
 
-    if (password && (username || email)) {
-      const user = await User.findOne({ $or: [{ username }, { email }] });
-      if (user && user.password == passwordEncrypt(password)) {
-        if (user.isActive) {
+    // Validate that password is provided
+    if (!password) {
+      throw new CustomError("Please enter password", 401);
+    }
+
+    // Validate that either username or email is provided (but not both)
+    if (!username && !email) {
+      throw new CustomError("Please enter username or email", 401);
+    }
+
+    // Find user by username or email
+    const user = await User.findOne({ $or: [{ username }, { email }] });
+    
+    if (user && user.password == passwordEncrypt(password)) {
+      if (user.isActive) {
           //* SIMPLE TOKEN \\
           let tokenData = await Token.findOne({ userId: user._id }); // Bu user'a ait token var mi yok mu kontrol et varsa olani döndürür.
           if (!tokenData) {
@@ -83,17 +102,11 @@ module.exports = {
             },
             user,
           });
-        } else {
-          throw new CustomError(
-            "Please enter username/email and password!",
-            401
-          );
-        }
       } else {
-        throw new CustomError("Wrong username/email or password!", 401);
+        throw new CustomError("Your account is not active. Please contact support.", 401);
       }
     } else {
-      throw new CustomError("Please enter username/email and password", 401);
+      throw new CustomError("Wrong username/email or password!", 401);
     }
   },
   refresh: async (req, res) => {
