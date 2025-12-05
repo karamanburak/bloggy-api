@@ -15,6 +15,7 @@ router
   .get(blog.list)
   .post(permission.isLogin, upload.single("image"), blog.create);
 router.route("/:id/postLike").post(permission.isLogin, blog.toggleLike);
+router.route("/:id/incrementViewer").post(blog.incrementViewer);
 router
   .route("/:id")
   .get(blog.read)

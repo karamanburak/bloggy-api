@@ -220,50 +220,20 @@ module.exports = {
       });
     }
 
-    if (!data.isPublish && !data.userId.equals(req.user._id)) {
-      return res.status(403).send({
-        error: true,
-        message: "You do not have permission to view this draft blog.",
-      });
+    // Check if blog is draft and user doesn't have permission
+    if (!data.isPublish) {
+      // If user is not logged in or not the owner, deny access
+      if (!req.user || !data.userId.equals(req.user._id)) {
+        return res.status(403).send({
+          error: true,
+          message: "You do not have permission to view this draft blog.",
+        });
+      }
     }
 
-    data.countOfVisitors = (data.countOfVisitors || 0) + 1;
-    // Save the changes
-    await data.save();
+    // Viewer count increment removed from read endpoint to prevent infinite loop
+    // Use incrementViewer endpoint separately if needed
 
-    /* -------------------------------------------------------------------------- */
-    // Check if the user's ID is already in visitedUsers array
-
-    // if (req.user) {
-    //   // Fetch the full user document
-    //   const user = await User.findById(req.user._id);
-
-    //   if (!user) {
-    //     return res.status(404).send({
-    //       error: true,
-    //       message: "User not found!",
-    //     });
-    //   }
-
-    //   // Check if the user's ID is already in visitedUsers array
-    //   if (!data.visitedUsers.includes(user._id)) {
-    //     data.visitedUsers.push(user._id);
-
-    //     // Save the updated blog document
-    //     await data.save();
-    //   }
-
-    //   // Initialize visitedBlogs if it doesn't exist
-    //   user.visitedBlogs = user.visitedBlogs || [];
-
-    //   // Check if the user has visited this blog before
-    //   if (!user.visitedBlogs.includes(req.params.id)) {
-    //     user.visitedBlogs.push(req.params.id);
-
-    //     // Save the updated user document
-    //     await user.save();
-    //   }
-    // }
     res.status(200).send({
       error: false,
       data,
@@ -372,6 +342,34 @@ module.exports = {
         ? "Blog unliked successfully"
         : "Blog liked successfully",
       data: blog,
+    });
+  },
+
+  incrementViewer: async (req, res) => {
+    /*
+        #swagger.tags = ["Blogs"]
+        #swagger.summary = "Increment Blog Viewer Count"
+    */
+    const blogId = req.params.id;
+    const data = await Blog.findById(blogId);
+
+    if (!data) {
+      return res.status(404).send({
+        error: true,
+        message: "Blog not found!",
+      });
+    }
+
+    // Only increment viewer count for published blogs
+    if (data.isPublish) {
+      data.countOfVisitors = (data.countOfVisitors || 0) + 1;
+      await data.save();
+    }
+
+    res.status(200).send({
+      error: false,
+      message: "Viewer count incremented",
+      countOfVisitors: data.countOfVisitors,
     });
   },
 };
