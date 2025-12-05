@@ -12,6 +12,8 @@ const permission = require("../middlewares/permissions");
 // URL: /comments
 
 router.route("/").get(comment.list).post(comment.create);
+router.route("/:id/postLike").post(permission.isLogin, idValidation, comment.toggleLike);
+router.route("/:id/postDislike").post(permission.isLogin, idValidation, comment.toggleDislike);
 router
   .route("/:id")
   .all(idValidation)

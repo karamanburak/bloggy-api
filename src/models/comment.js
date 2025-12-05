@@ -19,7 +19,24 @@ const CommentSchema = new mongoose.Schema({
     comment: {
         type: String,
         trim: true,
-    }
+    },
+    parentCommentId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment",
+        default: null
+    },
+    likes: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+        },
+    ],
+    dislikes: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+        },
+    ]
 }, {
     collection: "comments",
     timestamps: true
