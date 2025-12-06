@@ -5,12 +5,13 @@
 // app.use(errorHandler):
 
 module.exports = (err, req, res, next) => {
+    const statusCode = err.statusCode || res?.errorStatusCode || 500;
 
-    return res.status(res?.errorStatusCode || 500).send({
+    return res.status(statusCode).send({
         error: true,
         message: err.message,
         cause: err.cause,
         body: req.body,
-        stack: err.stack
+        stack: process.env.NODE_ENV === "development" ? err.stack : undefined
     });
 }
