@@ -23,7 +23,7 @@ router.use('/json', (req, res) => {
 
 // Redoc:
 const redoc = require('redoc-express')
-router.use('/redoc', redoc({ specUrl: '/documents/json', title: 'API Docs' }))
+router.use('/redoc', redoc({ specUrl: '/api/documents/json', title: 'API Docs' }))
 
 // Swagger:
 const swaggerUi = require('swagger-ui-express')

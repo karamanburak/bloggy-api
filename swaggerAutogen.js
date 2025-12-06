@@ -20,7 +20,7 @@ const document = {
   },
   // host: `${HOST}:${PORT}`,
   host: `bloggy-api-xa7p.onrender.com`,
-  basePath: "/",
+  basePath: "/api",
   schemes: ["http", "https"],
   consumes: ["application/json"],
   produces: ["application/json"],
