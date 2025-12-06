@@ -11,6 +11,7 @@
   "author": "Burak Karaman",
   "license": "ISC Licence",
   "dependencies": {
+    "@vercel/blob": "^2.0.0",
     "cors": "^2.8.5",
     "cron": "^3.1.7",
     "dotenv": "^16.3.1",

@@ -25,6 +25,8 @@ router.use('/comments', require('./comment'))
 
 // document:
 router.use('/documents', require('./document'))
+// upload:
+router.use('/upload', require('./upload'))
 
 /* ------------------------------------------------------- */
 module.exports = router
