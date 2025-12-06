@@ -70,9 +70,9 @@ app.all("/", (req, res) => {
     error: false,
     message: "Welcome to Bloggy API",
     documents: {
-      swagger: "/documents/swagger",
-      redoc: "/documents/redoc",
-      json: "/documents/json",
+      swagger: "/api/documents/swagger",
+      redoc: "/api/documents/redoc",
+      json: "/api/documents/json",
     },
     user: req.user,
   });
@@ -84,7 +84,7 @@ app.use("/uploads", express.static("./uploads"));
 // console.log("668a947fda3efd683614df26" + Date.now());
 
 // Routes:
-app.use(require("./src/routes"));
+app.use("/api", require("./src/routes"));
 
 app.use((req, res, next) => {
   res.status(404).send({
